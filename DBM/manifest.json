@@ -1,0 +1,17 @@
+{
+  "short_name": "Zodiac_Fusion",
+  "name": "Zodiac_Fusion",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#000000",
+  "orientation": "portrait"
+}
