@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Ophiuchus: Serpent Throne</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:#04060f;touch-action:manipulation;}
+body{font-family:'Georgia',serif;color:#ddd0a8;overscroll-behavior:none;}
+:root{
+  --bg:#04060f;--panel:#0b0820;--border:#261660;--border-g:#7a5500;
+  --txt:#ddd0a8;--dim:#6a5a90;--bright:#f0e0c0;
+  --gold:#d4a017;--purple:#8b3fe8;--teal:#1aaf8c;
+  --red:#c0392b;--redb:#e74c3c;--shadow:#150330;--green:#27ae60;
+  --blue:#2980b9;--ph:#b048e8;
+}
+#app{width:100vw;height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg);}
+.screen{width:100%;height:100%;display:none;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+/* MENU */
+#s-menu{justify-content:center;align-items:center;background:radial-gradient(ellipse at 50% 40%,#120828 0%,#04060f 75%);}
+.m-logo{text-align:center;margin-bottom:1.8rem;}
+.m-logo h1{font-size:2.1rem;color:var(--gold);text-shadow:0 0 24px rgba(212,160,23,.7);letter-spacing:.12em;margin-bottom:.25rem;}
+.m-logo .sub{font-size:.78rem;color:var(--dim);letter-spacing:.22em;text-transform:uppercase;}
+.m-logo .art{font-size:3rem;display:block;margin-bottom:.4rem;}
+.m-btns{display:flex;flex-direction:column;gap:.7rem;width:82%;max-width:290px;}
+/* BUTTONS */
+.btn{padding:.72rem 1.4rem;border:1px solid var(--border);background:rgba(38,22,96,.25);color:var(--txt);
+  font-family:'Georgia',serif;font-size:.95rem;cursor:pointer;text-align:center;border-radius:3px;
+  letter-spacing:.05em;transition:background .15s,border-color .15s;user-select:none;}
+.btn:active{background:rgba(139,63,232,.4);border-color:var(--purple);}
+.btn-g{border-color:var(--border-g);background:rgba(122,85,0,.18);color:var(--gold);}
+.btn-g:active{background:rgba(212,160,23,.28);}
+.btn-r{border-color:#5a0808;background:rgba(90,8,8,.2);color:#e07070;}
+.btn-r:active{background:rgba(192,57,43,.35);}
+.btn-t{border-color:#0a5040;background:rgba(10,80,64,.2);color:var(--teal);}
+.btn-t:active{background:rgba(26,175,140,.28);}
+.btn-sm{padding:.45rem .9rem;font-size:.8rem;}
+.btn:disabled{opacity:.35;cursor:default;}
+/* CREATE */
+#s-create{background:var(--bg);overflow-y:auto;}
+.cr-hdr{background:linear-gradient(180deg,#0b0820 0%,transparent 100%);padding:1rem;text-align:center;border-bottom:1px solid var(--border);}
+.cr-hdr h2{color:var(--gold);font-size:1.2rem;}
+.cr-hdr p{color:var(--dim);font-size:.78rem;margin-top:.25rem;}
+.cr-form{padding:1rem;display:flex;flex-direction:column;gap:.95rem;}
+.fg label{display:block;color:var(--dim);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem;}
+.fg input,.fg select{width:100%;padding:.58rem .75rem;background:rgba(11,8,32,.9);border:1px solid var(--border);
+  color:var(--txt);font-family:'Georgia',serif;font-size:.97rem;border-radius:3px;-webkit-appearance:none;appearance:none;}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--purple);}
+.gp{display:flex;gap:.7rem;}
+.gb{flex:1;padding:.58rem;border:1px solid var(--border);background:transparent;color:var(--dim);
+  font-family:'Georgia',serif;font-size:1.1rem;cursor:pointer;border-radius:3px;text-align:center;}
+.gb.sel{border-color:var(--purple);background:rgba(139,63,232,.2);color:var(--txt);}
+.cpv{background:rgba(11,8,32,.95);border:1px solid var(--border);border-radius:5px;padding:.9rem;text-align:center;}
+.cpv .ci{font-size:2.4rem;margin-bottom:.4rem;}
+.cpv .cn{color:var(--gold);font-size:1.05rem;margin-bottom:.18rem;}
+.cpv .ct{color:var(--purple);font-size:.78rem;margin-bottom:.65rem;}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;margin-top:.4rem;}
+.sc{background:rgba(38,22,96,.2);border:1px solid var(--border);border-radius:3px;padding:.35rem;text-align:center;}
+.sc .sl{font-size:.62rem;color:var(--dim);letter-spacing:.08em;}
+.sc .sv{font-size:.97rem;color:var(--txt);}
+/* STORY */
+#s-story{background:var(--bg);justify-content:flex-end;}
+.s-bg{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;pointer-events:none;}
+.s-art{font-size:4.5rem;opacity:.25;}
+.dlg{position:relative;z-index:10;background:rgba(4,6,15,.97);
+  border-top:2px solid var(--border);padding:.9rem;
+  min-height:42vh;max-height:62vh;display:flex;flex-direction:column;}
+.dlg-sp{color:var(--gold);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:.45rem;border-bottom:1px solid var(--border);padding-bottom:.35rem;}
+.dlg-tx{color:var(--txt);font-size:.92rem;line-height:1.65;flex:1;margin-bottom:.85rem;
+  white-space:pre-wrap;overflow-y:auto;max-height:200px;}
+.dlg-ch{display:flex;flex-direction:column;gap:.45rem;}
+.ch-btn{padding:.55rem .75rem;background:rgba(38,22,96,.18);border:1px solid var(--border);
+  color:var(--txt);font-family:'Georgia',serif;font-size:.85rem;cursor:pointer;
+  text-align:left;border-radius:3px;line-height:1.4;}
+.ch-btn:active{background:rgba(139,63,232,.28);border-color:var(--purple);}
+.dlg-adv{text-align:center;color:var(--dim);font-size:.72rem;animation:blink 1.6s infinite;cursor:pointer;padding:.3rem;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+/* BATTLE */
+#s-battle{background:radial-gradient(ellipse at top,#160430 0%,#04060f 65%);flex-direction:column;}
+.bat-hdr{padding:.65rem .9rem;border-bottom:1px solid var(--border);background:rgba(11,8,32,.85);
+  display:flex;justify-content:space-between;align-items:center;}
+.bat-scene{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:space-around;padding:.75rem;gap:.6rem;overflow:hidden;}
+.e-disp{text-align:center;}
+.e-ico{font-size:3.8rem;margin-bottom:.3rem;display:block;}
+.e-nm{color:var(--redb);font-size:1.05rem;font-weight:bold;}
+.hb-wrap{margin-top:.4rem;}
+.hb-lbl{display:flex;justify-content:space-between;font-size:.7rem;color:var(--dim);margin-bottom:.18rem;}
+.hb{height:9px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden;}
+.hf{height:100%;border-radius:5px;transition:width .45s;}
+.hf.en{background:linear-gradient(90deg,#7a0808,var(--redb));}
+.hf.pl{background:linear-gradient(90deg,#0a5040,var(--teal));}
+.hf.mp{background:linear-gradient(90deg,#14044a,var(--purple));}
+.bat-log{background:rgba(4,6,15,.92);border:1px solid var(--border);border-radius:5px;
+  padding:.65rem;font-size:.82rem;color:var(--txt);min-height:55px;max-height:70px;
+  overflow-y:auto;width:100%;text-align:center;line-height:1.55;}
+.bat-ft{padding:.65rem;border-top:1px solid var(--border);background:rgba(4,6,15,.97);}
+.act-g{display:grid;grid-template-columns:repeat(2,1fr);gap:.45rem;}
+.sk-btn{padding:.48rem .55rem;border:1px solid var(--border);background:rgba(11,8,32,.85);
+  color:var(--txt);font-family:'Georgia',serif;font-size:.78rem;cursor:pointer;
+  border-radius:3px;text-align:left;width:100%;}
+.sk-btn .sn{font-size:.82rem;color:var(--bright);display:block;margin-bottom:.1rem;}
+.sk-btn .sc2{font-size:.68rem;color:var(--dim);}
+.sk-btn:active:not(:disabled){background:rgba(139,63,232,.28);border-color:var(--purple);}
+.sk-btn:disabled{opacity:.35;}
+.sk-btn.atk{border-color:#5a1010;}
+.sk-btn.dfn{border-color:#0a5040;}
+.sk-btn.itm{border-color:var(--border-g);}
+.sk-btn.fl{border-color:#303030;}
+.sk-btn.sk1{border-color:#3a0860;}
+.sk-btn.sk2{border-color:#3a0860;}
+.sk-btn.sk3{border-color:#3a0860;}
+.sk-btn.sk4{border-color:#3a0860;}
+/* WORLD */
+#s-world{flex-direction:column;background:var(--bg);}
+.w-hdr{padding:.48rem .75rem;border-bottom:1px solid var(--border);display:flex;
+  justify-content:space-between;align-items:center;background:rgba(4,6,15,.97);font-size:.78rem;}
+.w-loc{color:var(--gold);}
+#mapCanvas{display:block;flex:1;width:100%;touch-action:none;}
+.w-ft{padding:.48rem;border-top:1px solid var(--border);background:rgba(4,6,15,.97);
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.35rem;max-width:200px;margin:0 auto;width:100%;}
+.dpad-btn{padding:.5rem;border:1px solid var(--border);background:rgba(38,22,96,.25);
+  color:var(--txt);font-size:.9rem;cursor:pointer;border-radius:3px;text-align:center;}
+.dpad-btn:active{background:rgba(139,63,232,.35);}
+/* EDITOR */
+#s-editor{flex-direction:column;background:var(--bg);}
+.ed-hdr{padding:.48rem .75rem;border-bottom:1px solid var(--border);display:flex;
+  justify-content:space-between;align-items:center;background:rgba(4,6,15,.97);font-size:.82rem;}
+.ed-body{flex:1;display:flex;overflow:hidden;}
+#editorCanvas{flex:1;display:block;touch-action:none;}
+.t-pal{width:56px;background:rgba(11,8,32,.97);border-left:1px solid var(--border);
+  overflow-y:auto;padding:.2rem;display:flex;flex-direction:column;gap:.2rem;}
+.tb{width:44px;height:44px;border:2px solid transparent;background:rgba(38,22,96,.2);
+  font-size:1.3rem;cursor:pointer;border-radius:3px;display:flex;align-items:center;
+  justify-content:center;padding:0;}
+.tb.sel{border-color:var(--gold);}
+.ed-ft{padding:.45rem;border-top:1px solid var(--border);display:flex;gap:.4rem;
+  background:rgba(4,6,15,.97);flex-wrap:wrap;align-items:center;}
+.ed-ft select{background:rgba(11,8,32,.9);border:1px solid var(--border);color:var(--txt);
+  padding:.3rem;border-radius:3px;font-size:.78rem;font-family:'Georgia',serif;}
+/* CHAR SHEET */
+#s-char{overflow-y:auto;background:var(--bg);}
+.cs-hdr{padding:.9rem;border-bottom:1px solid var(--border);text-align:center;
+  background:linear-gradient(180deg,#0b0820 0%,transparent 100%);}
+.cs-body{padding:1rem;}
+.sec-t{color:var(--gold);font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:.45rem;border-bottom:1px solid var(--border);padding-bottom:.22rem;margin-top:.75rem;}
+/* END */
+#s-end{justify-content:center;align-items:center;padding:1.5rem;overflow-y:auto;
+  background:radial-gradient(ellipse at center,#0b0820 0%,#04060f 70%);}
+.end-wrap{text-align:center;max-width:360px;}
+.end-t{font-size:1.4rem;color:var(--gold);margin-bottom:.75rem;}
+.end-tx{color:var(--txt);line-height:1.72;margin-bottom:1.2rem;font-size:.92rem;}
+/* CODEX */
+#s-codex{overflow-y:auto;background:var(--bg);}
+.cod-hdr{padding:.9rem;border-bottom:1px solid var(--border);text-align:center;}
+.cod-body{padding:.9rem;}
+.cod-card{background:rgba(11,8,32,.85);border:1px solid var(--border);border-radius:4px;
+  padding:.7rem;margin-bottom:.6rem;}
+.cod-card h3{color:var(--gold);font-size:.9rem;margin-bottom:.25rem;}
+.cod-card p{color:var(--dim);font-size:.78rem;line-height:1.5;}
+/* NOTIF */
+.notif{position:fixed;top:.8rem;left:50%;transform:translateX(-50%);
+  background:rgba(11,8,32,.97);border:1px solid var(--gold);color:var(--gold);
+  padding:.45rem .9rem;border-radius:4px;font-size:.82rem;z-index:999;
+  opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;
+  max-width:90vw;text-align:center;}
+.notif.show{opacity:1;}
+/* DIVIDER */
+hr.d{border:none;border-top:1px solid var(--border);margin:.65rem 0;}
+/* Scrollbar */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+/* Status badges */
+.sts{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.4rem;}
+.st-b{background:rgba(38,22,96,.3);border:1px solid var(--border);border-radius:3px;
+  padding:.15rem .4rem;font-size:.68rem;color:var(--dim);}
+.st-b span{color:var(--txt);}
+/* BOSS TITLE */
+.boss-tag{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--redb);
+  margin-bottom:.18rem;}
+/* ═══ printf() VM CONSOLE ═══ */
+#vm-ov{display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;
+  height:58vh;background:#020408;border-top:2px solid #1aaf8c;
+  flex-direction:column;font-family:monospace;box-shadow:0 -8px 32px rgba(26,175,140,.2);}
+#vm-ov.open{display:flex;}
+.vm-hdr{padding:.45rem .75rem;border-bottom:1px solid rgba(26,175,140,.25);
+  background:rgba(0,20,10,.95);display:flex;justify-content:space-between;align-items:center;
+  flex-shrink:0;}
+.vm-hdr-l{color:#1aaf8c;font-size:.78rem;letter-spacing:.1em;}
+.vm-hdr-r{display:flex;gap:.4rem;align-items:center;}
+.vm-hdr-r button{background:none;border:none;cursor:pointer;font-size:.85rem;padding:.2rem .4rem;
+  border-radius:3px;font-family:monospace;}
+.vm-out{flex:1;overflow-y:auto;padding:.6rem .75rem;background:#020408;}
+.vm-ln{font-family:monospace;font-size:.74rem;line-height:1.55;white-space:pre-wrap;
+  word-break:break-all;color:#c0b8d8;}
+.vm-in-row{display:flex;gap:.5rem;align-items:center;padding:.42rem .75rem;
+  border-top:1px solid rgba(26,175,140,.2);background:rgba(0,20,10,.9);flex-shrink:0;}
+.vm-prompt{color:#1aaf8c;font-size:.8rem;letter-spacing:.05em;}
+#vm-in{flex:1;background:transparent;border:none;color:#ddd0a8;
+  font-family:monospace;font-size:.8rem;outline:none;}
+.vm-run{padding:.25rem .6rem;background:rgba(26,175,140,.18);border:1px solid #1aaf8c;
+  color:#1aaf8c;cursor:pointer;border-radius:3px;font-size:.74rem;font-family:monospace;}
+.vm-quick{display:flex;flex-wrap:wrap;gap:.28rem;padding:.35rem .5rem;
+  background:rgba(0,16,8,.7);border-top:1px solid rgba(26,175,140,.08);flex-shrink:0;}
+.vmq{padding:.16rem .42rem;background:rgba(26,175,140,.08);border:1px solid rgba(26,175,140,.22);
+  color:#1aaf8c;cursor:pointer;border-radius:3px;font-size:.64rem;font-family:monospace;}
+.vmq:active{background:rgba(26,175,140,.22);}
+/* Secret-tap glow on ⚕ */
+.secret-tap{color:var(--gold);animation:pulse-gold .3s ease;}
+@keyframes pulse-gold{0%,100%{opacity:1}50%{opacity:.3;color:#fff;}}
+</style>
+</head>
+<body>
+<div id="app">
+<!-- ═══ MENU ═══ -->
+<div id="s-menu" class="screen active">
+  <div class="m-logo">
+    <span class="art">🐍⚕️🐍</span>
+    <h1 id="secret-h1" onclick="secretTap()" style="cursor:pointer">OPHIUCHUS</h1>
+    <div class="sub">The Serpent Throne · Tap title 5× for VM</div>
+  </div>
+  <div class="m-btns">
+    <button class="btn btn-g" onclick="startNew()">▶ New Game</button>
+    <button class="btn" onclick="loadGame()">↺ Continue</button>
+    <button class="btn btn-t" onclick="openEditor()">⚒ Level Editor</button>
+    <button class="btn" onclick="openCodex()">📖 Zodiac Codex</button>
+  </div>
+  <div style="position:absolute;bottom:1rem;width:100%;text-align:center;
+    color:var(--dim);font-size:.65rem;letter-spacing:.12em">
+    144 UNIQUE CHARACTERS · CHOICES MATTER · SHADOW BOSSES AWAIT
+  </div>
+</div>
+
+<!-- ═══ CREATE ═══ -->
+<div id="s-create" class="screen">
+  <div class="cr-hdr">
+    <h2>⚕️ Forge Your Destiny</h2>
+    <p>Birth month &amp; year determine your power — 144 possible souls</p>
+  </div>
+  <div class="cr-form">
+    <div class="fg"><label>Your Name</label>
+      <input id="in-name" type="text" placeholder="Enter your name" maxlength="18" oninput="handleNameInput(this.value)">
+    </div>
+    <div class="fg"><label>Gender</label>
+      <div class="gp">
+        <button class="gb sel" id="gb-m" onclick="selGender('M')">♂ Male</button>
+        <button class="gb" id="gb-f" onclick="selGender('F')">♀ Female</button>
+      </div>
+    </div>
+    <div class="fg"><label>Birth Month</label>
+      <select id="in-mo" onchange="updatePrev()">
+        <option value="1">January — Capricorn ♑</option>
+        <option value="2">February — Aquarius ♒</option>
+        <option value="3">March — Pisces ♓</option>
+        <option value="4">April — Aries ♈</option>
+        <option value="5">May — Taurus ♉</option>
+        <option value="6">June — Gemini ♊</option>
+        <option value="7">July — Cancer ♋</option>
+        <option value="8">August — Leo ♌</option>
+        <option value="9">September — Virgo ♍</option>
+        <option value="10">October — Libra ♎</option>
+        <option value="11">November — Scorpio ♏</option>
+        <option value="12">December — Sagittarius ♐</option>
+      </select>
+    </div>
+    <div class="fg"><label>Birth Year</label>
+      <input id="in-yr" type="number" placeholder="e.g. 1990" min="1900" max="2025" value="1990" oninput="updatePrev()">
+    </div>
+    <div class="cpv">
+      <div class="ci" id="pv-ico">🌑⚕️🌑</div>
+      <div class="cn" id="pv-nm">Enter your name</div>
+      <div class="ct" id="pv-tt">Choose month and year</div>
+      <hr class="d">
+      <div class="sg" id="pv-st"></div>
+      <div style="margin-top:.7rem;font-size:.78rem;color:var(--dim)" id="pv-sk"></div>
+    </div>
+    <button class="btn btn-g" onclick="confirmChar()">⚔ Enter the Shattered Realm</button>
+    <button class="btn" onclick="SS('menu')">← Back</button>
+  </div>
+</div>
+
+<!-- ═══ STORY ═══ -->
+<div id="s-story" class="screen">
+  <div class="s-bg"><div class="s-art" id="s-art">🌑</div></div>
+  <div class="dlg">
+    <div class="dlg-sp" id="dlg-sp">OPHIUCHUS</div>
+    <div class="dlg-tx" id="dlg-tx"></div>
+    <div class="dlg-ch" id="dlg-ch"></div>
+    <div class="dlg-adv" id="dlg-adv" onclick="advance()" style="display:none">▼ Tap to continue</div>
+  </div>
+</div>
+
+<!-- ═══ BATTLE ═══ -->
+<div id="s-battle" class="screen">
+  <div class="bat-hdr">
+    <div style="font-size:.75rem;color:var(--dim)">⚔ BATTLE</div>
+    <div style="font-size:.85rem" id="bt-ch">Chapter 1</div>
+  </div>
+  <div class="bat-scene">
+    <div class="e-disp">
+      <div class="boss-tag" id="bt-tag" style="display:none">⚠ SHADOW BOSS ⚠</div>
+      <span class="e-ico" id="bt-ei">👾</span>
+      <div class="e-nm" id="bt-en">Shadow Beast</div>
+      <div class="hb-wrap" style="width:220px">
+        <div class="hb-lbl"><span>HP</span><span id="bt-ehp">???</span></div>
+        <div class="hb"><div class="hf en" id="bt-ebar" style="width:100%"></div></div>
+      </div>
+    </div>
+    <div class="sts" id="bt-sts" style="justify-content:center"></div>
+    <div class="bat-log" id="bt-log">Prepare for battle!</div>
+    <div style="text-align:center;width:100%">
+      <div style="font-size:.82rem;color:var(--dim);margin-bottom:.28rem" id="bt-pn">Hero</div>
+      <div class="hb-wrap">
+        <div class="hb-lbl"><span>HP</span><span id="bt-php">100/100</span></div>
+        <div class="hb"><div class="hf pl" id="bt-pbar" style="width:100%"></div></div>
+      </div>
+      <div class="hb-wrap" style="margin-top:.28rem">
+        <div class="hb-lbl"><span>MP</span><span id="bt-pmp">50/50</span></div>
+        <div class="hb"><div class="hf mp" id="bt-pmbar" style="width:100%"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bat-ft">
+    <div class="act-g" id="bt-act"></div>
+  </div>
+</div>
+
+<!-- ═══ WORLD ═══ -->
+<div id="s-world" class="screen">
+  <div class="w-hdr">
+    <div class="w-loc" id="w-loc">The Shattered Realm</div>
+    <div style="display:flex;gap:.4rem">
+      <button class="btn btn-sm" onclick="showChar()">👤</button>
+      <button class="btn btn-sm" onclick="saveGame();notify('💾 Saved!')">💾</button>
+      <button class="btn btn-sm" style="color:var(--teal);border-color:#0a5040" onclick="openVM()">printf()</button>
+      <button class="btn btn-sm" onclick="SS('menu')">≡</button>
+    </div>
+  </div>
+  <canvas id="mapCanvas"></canvas>
+  <div class="w-ft">
+    <div></div><button class="dpad-btn" onclick="mv(0,-1)">▲</button><div></div>
+    <button class="dpad-btn" onclick="mv(-1,0)">◀</button>
+    <button id="oph-center" onclick="secretTap()" style="display:flex;align-items:center;justify-content:center;
+      font-size:.75rem;background:rgba(38,22,96,.2);border:1px solid var(--border);
+      border-radius:3px;cursor:pointer;color:var(--gold);transition:color .2s">⚕</button>
+    <button class="dpad-btn" onclick="mv(1,0)">▶</button>
+    <div></div><button class="dpad-btn" onclick="mv(0,1)">▼</button><div></div>
+  </div>
+</div>
+
+<!-- ═══ EDITOR ═══ -->
+<div id="s-editor" class="screen">
+  <div class="ed-hdr">
+    <button class="btn btn-sm" onclick="SS('menu')">← Back</button>
+    <span style="color:var(--gold)">Level Editor</span>
+    <div style="display:flex;gap:.3rem">
+      <button class="btn btn-sm btn-t" onclick="saveMap()">Save</button>
+      <button class="btn btn-sm" onclick="loadMap()">Load</button>
+      <button class="btn btn-sm btn-r" onclick="clearMap()">Clear</button>
+    </div>
+  </div>
+  <div class="ed-body">
+    <canvas id="editorCanvas"></canvas>
+    <div class="t-pal" id="t-pal"></div>
+  </div>
+  <div class="ed-ft">
+    <select id="ed-sz">
+      <option value="10">10×10</option>
+      <option value="15" selected>15×15</option>
+      <option value="20">20×20</option>
+    </select>
+    <select id="ed-dif">
+      <option value=".7">Easy</option>
+      <option value="1" selected>Normal</option>
+      <option value="1.5">Hard</option>
+      <option value="2">Nightmare</option>
+    </select>
+    <button class="btn btn-sm btn-g" onclick="testMap()">▶ Test</button>
+  </div>
+</div>
+
+<!-- ═══ CHAR SHEET ═══ -->
+<div id="s-char" class="screen">
+  <div class="cs-hdr">
+    <div style="font-size:2.2rem" id="cs-ico">🌑</div>
+    <div style="color:var(--gold);font-size:1.05rem;margin-top:.4rem" id="cs-nm">Hero</div>
+    <div style="color:var(--purple);font-size:.78rem" id="cs-tt">The Unknown</div>
+  </div>
+  <div class="cs-body" id="cs-bd"></div>
+  <div style="padding:1rem"><button class="btn" onclick="goBack()">← Back</button></div>
+</div>
+
+<!-- ═══ ENDING ═══ -->
+<div id="s-end" class="screen">
+  <div class="end-wrap">
+    <div class="end-t" id="e-t">THE END</div>
+    <div style="font-size:3rem;margin-bottom:.8rem" id="e-ico">🌟</div>
+    <div class="end-tx" id="e-tx"></div>
+    <div style="font-size:.78rem;color:var(--dim);margin-bottom:1.2rem" id="e-st"></div>
+    <button class="btn btn-g" onclick="SS('menu')">↺ Play Again</button>
+  </div>
+</div>
+
+<!-- ═══ CODEX ═══ -->
+<div id="s-codex" class="screen">
+  <div class="cod-hdr">
+    <div style="font-size:1.8rem">📖</div>
+    <div style="color:var(--gold);font-size:1.05rem;margin-top:.3rem">Zodiac Codex</div>
+    <div style="color:var(--dim);font-size:.75rem;margin-top:.2rem">144 Fusions · Two Traditions · One Realm</div>
+  </div>
+  <div class="cod-body" id="cod-bd"></div>
+  <div style="padding:1rem"><button class="btn" onclick="SS('menu')">← Back</button></div>
+</div>
+</div>
+
+<!-- ═══ printf() VM CONSOLE OVERLAY ═══ -->
+<div id="vm-ov">
+  <div class="vm-hdr">
+    <div class="vm-hdr-l">◈ printf() VM
+      <span style="color:#6a5a90;margin-left:.5rem;font-size:.68rem">quaterbase4i · p=00 d=01 b=10 q=11 · 256-byte memory</span>
+    </div>
+    <div class="vm-hdr-r">
+      <button onclick="vmExec('sig')" style="color:#d4a017;border:1px solid #7a5500;
+        background:rgba(122,85,0,.15);padding:.2rem .5rem">sig</button>
+      <button onclick="vmExec('stats')" style="color:#8b3fe8;border:1px solid #3a0860;
+        background:rgba(58,8,96,.15);padding:.2rem .5rem">stats</button>
+      <button onclick="closeVM()" style="color:#e74c3c;font-size:1rem">✕</button>
+    </div>
+  </div>
+  <div class="vm-out" id="vm-out"></div>
+  <div class="vm-quick">
+    <button class="vmq" onclick="vmExec('help')">help</button>
+    <button class="vmq" onclick="vmExec('encode 255')">enc 255</button>
+    <button class="vmq" onclick="vmExec('decode pdbq')">dec pdbq</button>
+    <button class="vmq" onclick="vmExec('imag pdbq')">×i pdbq</button>
+    <button class="vmq" onclick="vmExec('shadow pdbq')">~ pdbq</button>
+    <button class="vmq" onclick="vmExec('complex pdbq')">cplx pdbq</button>
+    <button class="vmq" onclick="vmExec('dump')">dump</button>
+    <button class="vmq" onclick="vmExec('cheat hp')">cheat hp</button>
+    <button class="vmq" onclick="vmExec('cheat mp')">cheat mp</button>
+    <button class="vmq" onclick="vmExec('cheat xp')">cheat xp</button>
+  </div>
+  <div class="vm-in-row">
+    <span class="vm-prompt">printf &gt;</span>
+    <input id="vm-in" placeholder='printf("ATK=%d arc=%q", ATK, ATK)'
+           onkeydown="if(event.key==='Enter')runVM()">
+    <button class="vm-run" onclick="runVM()">RUN</button>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  DATA: WESTERN ZODIAC (month 1–12)
+// ═══════════════════════════════════════════════════
+const WZ=[null,
+ {m:1,name:'Capricorn',sym:'♑',el:'Earth',q:'Cardinal',c:'#8B7355',ic:'🏔️',desc:'The Mountain Sovereign — enduring and ambitious'},
+ {m:2,name:'Aquarius',sym:'♒',el:'Air',q:'Fixed',c:'#5B8DCC',ic:'⚡',desc:'The Storm Rebel — visionary and revolutionary'},
+ {m:3,name:'Pisces',sym:'♓',el:'Water',q:'Mutable',c:'#5CC8CC',ic:'🌊',desc:'The Dream Drifter — mystical and empathic'},
+ {m:4,name:'Aries',sym:'♈',el:'Fire',q:'Cardinal',c:'#CC4444',ic:'🔥',desc:'The War Spark — bold and pioneering'},
+ {m:5,name:'Taurus',sym:'♉',el:'Earth',q:'Fixed',c:'#7B9B4C',ic:'🌿',desc:'The Iron Root — steadfast and resolute'},
+ {m:6,name:'Gemini',sym:'♊',el:'Air',q:'Mutable',c:'#CCBB44',ic:'💫',desc:'The Twin Wind — quick and mercurial'},
+ {m:7,name:'Cancer',sym:'♋',el:'Water',q:'Cardinal',c:'#9999CC',ic:'🌙',desc:'The Moon Tide — protective and intuitive'},
+ {m:8,name:'Leo',sym:'♌',el:'Fire',q:'Fixed',c:'#DDA000',ic:'☀️',desc:'The Solar Mane — regal and passionate'},
+ {m:9,name:'Virgo',sym:'♍',el:'Earth',q:'Mutable',c:'#88AA66',ic:'🌾',desc:'The Harvest Mind — precise and devoted'},
+ {m:10,name:'Libra',sym:'♎',el:'Air',q:'Cardinal',c:'#CC88BB',ic:'⚖️',desc:'The Scale Wind — just and harmonious'},
+ {m:11,name:'Scorpio',sym:'♏',el:'Water',q:'Fixed',c:'#882244',ic:'🦂',desc:'The Deep Sting — intense and transformative'},
+ {m:12,name:'Sagittarius',sym:'♐',el:'Fire',q:'Mutable',c:'#CC7733',ic:'🏹',desc:'The Arrow Star — adventurous and philosophical'},
+];
+
+// ═══════════════════════════════════════════════════
+//  DATA: CHINESE ZODIAC (year)
+// ═══════════════════════════════════════════════════
+const CZ=[
+ {i:0,name:'Rat',el:'Water',ic:'🐀',yang:true,desc:'Cunning survivor, master of adaptation and wit'},
+ {i:1,name:'Ox',el:'Earth',ic:'🐂',yang:false,desc:'Tireless strength, immovable will and patience'},
+ {i:2,name:'Tiger',el:'Wood',ic:'🐅',yang:true,desc:'Fearless hunter, born to lead by raw courage'},
+ {i:3,name:'Rabbit',el:'Wood',ic:'🐇',yang:false,desc:'Swift grace, keeper of secrets and quiet wisdom'},
+ {i:4,name:'Dragon',el:'Earth',ic:'🐉',yang:true,desc:'Divine power, shaper of fate and legend'},
+ {i:5,name:'Snake',el:'Fire',ic:'🐍',yang:false,desc:'Coiled wisdom, seeker of deep hidden truth'},
+ {i:6,name:'Horse',el:'Fire',ic:'🐴',yang:true,desc:'Wild freedom, thundering spirit unbound'},
+ {i:7,name:'Goat',el:'Earth',ic:'🐐',yang:false,desc:'Creative calm, gentle strength of a healer'},
+ {i:8,name:'Monkey',el:'Metal',ic:'🐒',yang:true,desc:'Brilliant trickster, inventor and improviser'},
+ {i:9,name:'Rooster',el:'Metal',ic:'🐓',yang:false,desc:'Keen observer, unyielding in honor and duty'},
+ {i:10,name:'Dog',el:'Earth',ic:'🐕',yang:true,desc:'Loyal guardian, faithful heart beyond measure'},
+ {i:11,name:'Pig',el:'Water',ic:'🐖',yang:false,desc:'Generous spirit, deep compassion for all life'},
+];
+
+// ═══════════════════════════════════════════════════
+//  DATA: SHADOW BOSSES (12 + Chimera)
+// ═══════════════════════════════════════════════════
+const SB=[
+ {id:'s_rat',name:'Shadow Rat',ic:'🐀',isBoss:true,stats:{HP:210,ATK:40,DEF:18,SPD:44,MP:60},
+  sk:['void_bite','shadow_dash','poison_mist'],desc:'Void-wraith of scurrying darkness — feeds on doubt and stolen moments'},
+ {id:'s_ox',name:'Shadow Ox',ic:'🐂',isBoss:true,stats:{HP:290,ATK:52,DEF:42,SPD:18,MP:40},
+  sk:['crush','iron_wall','trample'],desc:'Darkness given immovable form — it shatters light with absolute patience'},
+ {id:'s_tiger',name:'Shadow Tiger',ic:'🐅',isBoss:true,stats:{HP:240,ATK:58,DEF:26,SPD:46,MP:50},
+  sk:['void_claw','predator_leap','roar_fear'],desc:'Hunger given form — stalks the edges of fractured reality'},
+ {id:'s_rabbit',name:'Shadow Rabbit',ic:'🐇',isBoss:true,stats:{HP:195,ATK:43,DEF:22,SPD:58,MP:82},
+  sk:['blink_strike','illusion_hex','lunar_drain'],desc:'A beautiful lie that steals your soul with a smile'},
+ {id:'s_dragon',name:'Shadow Dragon',ic:'🐉',isBoss:true,stats:{HP:330,ATK:68,DEF:36,SPD:30,MP:95},
+  sk:['void_breath','chaos_wing','shadow_aura'],desc:'Corrupted majesty — the fallen divine, splendor turned to void'},
+ {id:'s_snake',name:'Shadow Snake',ic:'🐍',isBoss:true,stats:{HP:215,ATK:49,DEF:30,SPD:38,MP:105},
+  sk:['venom_fang','coil_crush','mind_pierce'],desc:'Ancient corruption whispering madness into reason'},
+ {id:'s_horse',name:'Shadow Horse',ic:'🐴',isBoss:true,stats:{HP:245,ATK:60,DEF:22,SPD:62,MP:46},
+  sk:['void_charge','stampede','nightmare_spd'],desc:'Darkness racing to trample every remaining light'},
+ {id:'s_goat',name:'Shadow Goat',ic:'🐐',isBoss:true,stats:{HP:205,ATK:46,DEF:48,SPD:24,MP:78},
+  sk:['null_heal','dark_barrier','soul_drain'],desc:'Corrupted mercy — devours instead of saves'},
+ {id:'s_monkey',name:'Shadow Monkey',ic:'🐒',isBoss:true,stats:{HP:225,ATK:54,DEF:28,SPD:52,MP:88},
+  sk:['chaos_trick','copy_skill','void_bombs'],desc:'Maddened genius — unravels reality itself as play'},
+ {id:'s_rooster',name:'Shadow Rooster',ic:'🐓',isBoss:true,stats:{HP:235,ATK:58,DEF:38,SPD:35,MP:62},
+  sk:['null_dawn','shadow_cry','feather_storm'],desc:'The cry that silences all hope at the break of void-dawn'},
+ {id:'s_dog',name:'Shadow Dog',ic:'🐕',isBoss:true,stats:{HP:255,ATK:54,DEF:44,SPD:32,MP:56},
+  sk:['betrayal_bite','void_loyalty','cursed_howl'],desc:'Devotion twisted into devouring — love as a weapon'},
+ {id:'s_pig',name:'Shadow Pig',ic:'🐖',isBoss:true,stats:{HP:265,ATK:48,DEF:40,SPD:22,MP:92},
+  sk:['null_feast','consume_light','abyss_pull'],desc:'Bottomless void hunger — it eats until nothing remains'},
+];
+
+const CHIMERA={
+ id:'chimera',name:'Shadow Chimera',ic:'🌑',isBoss:true,isFinal:true,
+ stats:{HP:900,ATK:92,DEF:72,SPD:56,MP:220},
+ sk:['void_all','chaos_absorb','final_void','all_shadow'],
+ desc:'All twelve shadows fused into one — the absolute end of every world',
+ phases:[{pct:.66,msg:'The Chimera writhes — its form multiplies!',mul:1.2},{pct:.33,msg:'FINAL FORM — all void awakens!',mul:1.5}]
+};
+
+// Wild enemies for overworld encounters
+const WE=[
+ {id:'void_shard',name:'Void Shard',ic:'💠',stats:{HP:85,ATK:22,DEF:10,SPD:28,MP:20},sk:['strike'],desc:'Fragment of shattered reality'},
+ {id:'ghost_flame',name:'Ghost Flame',ic:'🕯️',stats:{HP:95,ATK:28,DEF:8,SPD:32,MP:42},sk:['fire_lick','soul_burn'],desc:'Lost soul wandering the void'},
+ {id:'void_hound',name:'Void Hound',ic:'🐾',stats:{HP:125,ATK:34,DEF:15,SPD:36,MP:16},sk:['void_bite','savage_rush'],desc:'Shadow beast that hunts wanderers'},
+ {id:'stone_doll',name:'Stone Doll',ic:'🗿',stats:{HP:155,ATK:26,DEF:42,SPD:8,MP:12},sk:['crush','stone_skin'],desc:'Animated remnant of the dead age'},
+ {id:'mirror_twin',name:'Mirror Twin',ic:'🪞',stats:{HP:105,ATK:36,DEF:18,SPD:30,MP:62},sk:['copy_skill','illusion_hex'],desc:'Dark reflection of the wanderer'},
+];
+
+// ═══════════════════════════════════════════════════
+//  DATA: SKILLS
+// ═══════════════════════════════════════════════════
+const SK={
+ fire_strike:{n:'Solar Strike',c:8,t:'dmg',m:1.7,el:'Fire',d:'Blazing direct hit',ic:'🔥'},
+ fire_aoe:{n:'Corona Burst',c:15,t:'dmg_debuff',m:1.4,el:'Fire',d:'Blast + lowers enemy ATK',ic:'☀️'},
+ earth_shield:{n:'Stone Guard',c:6,t:'buff',st:'DEF',bv:.35,tr:2,d:'Raise DEF 35% for 2 turns',ic:'🛡️'},
+ earth_quake:{n:'Terra Shatter',c:14,t:'dmg_pierce',m:1.5,p:.5,el:'Earth',d:'Pierces 50% of DEF',ic:'🏔️'},
+ air_slash:{n:'Gale Blade',c:9,t:'dmg_spd',m:1.6,el:'Air',d:'Fast slash + raise SPD',ic:'💨'},
+ air_dodge:{n:'Zephyr Veil',c:10,t:'evade',d:'Evade next enemy attack',ic:'🌀'},
+ water_heal:{n:'Tidal Mend',c:12,t:'heal',pct:.38,d:'Restore 38% max HP',ic:'💧'},
+ water_drain:{n:'Deep Pull',c:13,t:'drain',m:1.35,d:'Drain HP from enemy to self',ic:'🌊'},
+ wood_grow:{n:'Life Surge',c:8,t:'regen',pct:.1,tr:3,d:'Regen 10% HP/turn × 3',ic:'🌿'},
+ wood_thorn:{n:'Thorn Lash',c:10,t:'dmg_dot',m:1.5,el:'Wood',d:'Damage + poison DoT',ic:'🌾'},
+ metal_cut:{n:'Iron Edge',c:9,t:'dmg',m:1.85,el:'Metal',d:'Precise cut — highest base damage',ic:'⚔️'},
+ metal_luck:{n:'Fortune Flip',c:7,t:'buff',st:'LCK',bv:1.0,tr:2,d:'Double LCK for 2 turns',ic:'🍀'},
+ serpent_bind:{n:'Serpent Bind',c:18,t:'stun',m:1.15,d:'Serpent coil — stuns for 1 turn',ic:'🐍'},
+ // Enemy skills
+ strike:{n:'Strike',c:0,t:'dmg',m:1.0,ic:'💥'},
+ void_bite:{n:'Void Bite',c:5,t:'dmg',m:1.3,ic:'🌑'},
+ shadow_dash:{n:'Shadow Dash',c:8,t:'dmg',m:1.55,ic:'💨'},
+ poison_mist:{n:'Poison Mist',c:10,t:'dmg_dot',m:.85,ic:'☠️'},
+ crush:{n:'Crush',c:5,t:'dmg',m:1.45,ic:'💢'},
+ iron_wall:{n:'Iron Wall',c:8,t:'buff',st:'DEF',bv:.55,tr:2,ic:'🛡️'},
+ trample:{n:'Trample',c:12,t:'dmg',m:1.85,ic:'🐾'},
+ void_claw:{n:'Void Claw',c:8,t:'dmg',m:1.65,ic:'🌑'},
+ predator_leap:{n:'Predator Leap',c:10,t:'dmg',m:2.05,ic:'⬆️'},
+ roar_fear:{n:'Roar of Fear',c:12,t:'debuff',st:'ATK',rv:.22,tr:2,ic:'😱'},
+ blink_strike:{n:'Blink Strike',c:8,t:'dmg',m:1.55,ic:'✨'},
+ illusion_hex:{n:'Illusion Hex',c:12,t:'debuff',st:'DEF',rv:.3,tr:2,ic:'🪞'},
+ lunar_drain:{n:'Lunar Drain',c:15,t:'drain',m:1.25,ic:'🌙'},
+ void_breath:{n:'Void Breath',c:15,t:'dmg',m:2.05,ic:'💨'},
+ chaos_wing:{n:'Chaos Wing',c:12,t:'dmg',m:1.75,ic:'🌀'},
+ shadow_aura:{n:'Shadow Aura',c:18,t:'buff',st:'ATK',bv:.35,tr:3,ic:'🌑'},
+ venom_fang:{n:'Venom Fang',c:10,t:'dmg_dot',m:1.45,ic:'☠️'},
+ coil_crush:{n:'Coil Crush',c:14,t:'dmg',m:1.65,ic:'🐍'},
+ mind_pierce:{n:'Mind Pierce',c:16,t:'dmg_pierce',m:1.55,p:.85,ic:'🧠'},
+ void_charge:{n:'Void Charge',c:12,t:'dmg',m:1.95,ic:'⚡'},
+ stampede:{n:'Stampede',c:18,t:'dmg',m:2.25,ic:'🐴'},
+ nightmare_spd:{n:'Nightmare Speed',c:10,t:'buff',st:'SPD',bv:.55,tr:2,ic:'💨'},
+ null_heal:{n:'Null Feast',c:12,t:'self_heal',pct:.18,ic:'🌑'},
+ dark_barrier:{n:'Dark Barrier',c:14,t:'buff',st:'DEF',bv:.65,tr:3,ic:'🛡️'},
+ soul_drain:{n:'Soul Drain',c:18,t:'drain',m:1.35,ic:'💀'},
+ chaos_trick:{n:'Chaos Trick',c:10,t:'dmg',m:1.65,ic:'🃏'},
+ copy_skill:{n:'Copy Strike',c:15,t:'dmg',m:1.45,ic:'🪞'},
+ void_bombs:{n:'Void Bombs',c:14,t:'dmg',m:1.85,ic:'💣'},
+ null_dawn:{n:'Null Dawn',c:16,t:'debuff',st:'SPD',rv:.3,tr:2,ic:'🌑'},
+ shadow_cry:{n:'Shadow Cry',c:12,t:'debuff',st:'ATK',rv:.26,tr:2,ic:'😭'},
+ feather_storm:{n:'Feather Storm',c:14,t:'dmg',m:1.75,ic:'🪶'},
+ betrayal_bite:{n:'Betrayal Bite',c:14,t:'dmg',m:1.85,ic:'🐾'},
+ void_loyalty:{n:'Void Loyalty',c:16,t:'drain',m:1.45,ic:'🌑'},
+ cursed_howl:{n:'Cursed Howl',c:18,t:'debuff',st:'DEF',rv:.38,tr:2,ic:'🐕'},
+ consume_light:{n:'Consume Light',c:16,t:'drain',m:1.55,ic:'💀'},
+ abyss_pull:{n:'Abyss Pull',c:20,t:'dmg',m:2.05,ic:'🕳️'},
+ fire_lick:{n:'Fire Lick',c:6,t:'dmg_dot',m:1.0,ic:'🔥'},
+ soul_burn:{n:'Soul Burn',c:12,t:'dmg',m:1.45,ic:'🕯️'},
+ savage_rush:{n:'Savage Rush',c:8,t:'dmg',m:1.55,ic:'💢'},
+ stone_skin:{n:'Stone Skin',c:10,t:'buff',st:'DEF',bv:.55,tr:2,ic:'🗿'},
+ illusion:{n:'Illusion',c:12,t:'evade',ic:'✨'},
+ void_all:{n:'Void All',c:25,t:'dmg',m:3.0,ic:'🕳️'},
+ chaos_absorb:{n:'Chaos Absorb',c:15,t:'self_heal',pct:.25,ic:'💀'},
+ final_void:{n:'Final Void',c:30,t:'dmg',m:3.8,ic:'💥'},
+ all_shadow:{n:'All-Shadow',c:20,t:'dmg',m:2.5,ic:'🌑'},
+};
+
+// ═══════════════════════════════════════════════════
+//  DATA: TILES
+// ═══════════════════════════════════════════════════
+const TL={
+ VOID: {id:0,label:'Void',col:'#04060f',walk:false,icon:''},
+ FLOOR:{id:1,label:'Floor',col:'#161030',walk:true,icon:''},
+ WALL: {id:2,label:'Wall',col:'#231558',walk:false,icon:''},
+ GRASS:{id:3,label:'Grass',col:'#173020',walk:true,icon:''},
+ WATER:{id:4,label:'Water',col:'#082440',walk:false,icon:''},
+ STONE:{id:5,label:'Stone',col:'#222222',walk:false,icon:''},
+ ENMTY:{id:6,label:'Enemy',col:'#380e0e',walk:true,icon:'👾',trg:'battle'},
+ CHEST:{id:7,label:'Chest',col:'#382400',walk:true,icon:'📦',trg:'chest'},
+ BOSS: {id:8,label:'Boss',col:'#420018',walk:true,icon:'🌑',trg:'boss'},
+ DOOR: {id:9,label:'Door',col:'#382000',walk:true,icon:'🚪',trg:'door'},
+ SAVE: {id:10,label:'Save',col:'#002432',walk:true,icon:'💾',trg:'save'},
+ NPC:  {id:11,label:'NPC',col:'#003018',walk:true,icon:'👤',trg:'npc'},
+};
+const TLIST=Object.values(TL);
+
+const DEF_MAP=[
+ [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+ [2,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+ [2,1,3,3,11,1,1,1,1,1,1,1,1,1,2],
+ [2,1,3,3,1,2,2,2,1,1,1,1,1,1,2],
+ [2,1,1,1,1,2,6,2,1,1,3,6,3,1,2],
+ [2,1,1,1,1,1,1,1,1,1,3,3,3,1,2],
+ [2,1,1,1,1,1,1,1,1,1,1,1,7,1,2],
+ [2,1,6,1,1,1,1,10,1,1,1,1,1,1,2],
+ [2,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+ [2,1,1,1,1,2,2,9,2,2,1,1,6,1,2],
+ [2,1,1,1,1,2,1,1,1,2,1,1,1,1,2],
+ [2,1,1,7,1,2,1,8,1,2,1,1,1,1,2],
+ [2,1,1,1,1,2,2,2,2,2,1,1,1,1,2],
+ [2,1,1,1,1,1,1,1,1,1,1,1,1,1,2],
+ [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+];
+
+// ═══════════════════════════════════════════════════
+//  STORY NODES
+// ═══════════════════════════════════════════════════
+const NODES={
+ intro:{sp:'OPHIUCHUS — Keeper of the Serpent',art:'🐍⚕️🐍',type:'advance',
+  tx:'The serpent coils around the staff. You feel it before you see it — the collision.\n\nTwo zodiac realms, Eastern and Western, have fused into one chaotic universe. Time fractures. Stars bleed darkness. And from that darkness... twelve shadow beasts rise.\n\nI am Ophiuchus, the Forgotten Thirteenth — the bridge between both worlds. I have been waiting for someone born at the exact convergence.',
+  next:'intro2'},
+ intro2:{sp:'OPHIUCHUS',art:'🌑',type:'choice',
+  tx:'The shadow zodiac hunts what cannot be named — the space between signs. The twelve beasts grow stronger each moment they feed on the chaos.\n\nYou are uniquely born — a fusion of Western and Eastern stars. That is why the serpent called you here. Only such a one can walk between the worlds.',
+  choices:[
+   {tx:'Why me? There must be others.',next:'i3a',fl:{k:'curious',v:true}},
+   {tx:'I am ready. Show me what I must fight.',next:'i3b',fl:{k:'bold',v:true}},
+   {tx:'What do I gain from this journey?',next:'i3c',fl:{k:'pragmatic',v:true}},
+  ]},
+ i3a:{sp:'OPHIUCHUS',art:'🌌',type:'advance',
+  tx:'There were others. The Shadow Rat found the last one. Now only echoes remain.\n\nYou are not chosen by fate — you are chosen by the stars\' mathematics. A precise year and month creates a precise frequency. The shadow cannot touch a signal it cannot read.\n\nFor now.',next:'intro4'},
+ i3b:{sp:'OPHIUCHUS',art:'⚔️',type:'advance',
+  tx:'That fire — that is why the serpent chose you. But boldness without wisdom is just a faster path to the void.\n\nLearn the shadows before you strike them. Each beast carries an aspect of the zodiac it corrupted. Their weakness is within their own nature.\n\nNow then — the Realm awaits.',next:'intro4'},
+ i3c:{sp:'OPHIUCHUS',art:'⚖️',type:'advance',
+  tx:'Pragmatic. Good. Blind heroism wastes potential.\n\nWhat do you gain? The power to write the ending. If the Shadow Chimera forms — all twelve beasts fused — both zodiac realms collapse. All 144 futures end.\n\nYou save yourself by saving everything. Is that reason enough?',next:'intro4'},
+ intro4:{sp:'OPHIUCHUS',art:'🗺️',type:'choice',
+  tx:'The Shattered Realm stretches before you — a patchwork of constellation ruins and spirit forests tangled together.\n\nThe first shadow beast waits nearby. There is someone else here, however. A voice calling from the shadows...',
+  choices:[
+   {tx:'Go to the stranger.',next:'s_meet',fl:{k:'trusting',v:true}},
+   {tx:'Ignore it. Could be a trap.',next:'s_skip',fl:{k:'cautious',v:true}},
+  ]},
+ s_meet:{sp:'??? — A fractured voice',art:'👤',type:'choice',
+  tx:'"Wait — you can hear me? The serpent staff... you found the bearer!"\n\nA figure emerges from fractured light — a fellow zodiac-born, form flickering between East and West. Caught between worlds.\n\n"I am Lyra. Previous bearer — until the Shadow Rabbit stole half my being. I can guide you if you let me. Or I understand if you don\'t trust a half-ghost."',
+  choices:[
+   {tx:'"Come with me, Lyra."',next:'s_yes',fl:{k:'ally',v:true}},
+   {tx:'"I work alone. Rest — I\'ll find you."',next:'s_no',fl:{k:'solo',v:true}},
+  ]},
+ s_yes:{sp:'LYRA',art:'✨',type:'advance',
+  tx:'"Thank you. I won\'t waste your trust."\n\nLyra joins as a spectral guide. She knows the Shadow Rat\'s weakness: it fears the light of fixed signs.\n\n[Lyra\'s guidance: +20% damage in first boss battle]',
+  next:'w_begin',ef:{fl:'guide',v:true}},
+ s_no:{sp:'LYRA',art:'🌑',type:'advance',
+  tx:'"I understand. Find me if you need me."\n\nLyra fades into the light-cracks. She will leave clues in the ruins if you look carefully.\n\nYou continue alone.',next:'w_begin'},
+ s_skip:{sp:'OPHIUCHUS',art:'🐍',type:'advance',
+  tx:'Wise. The Shadow Rabbit uses illusions of crying travelers to lure the unwary.\n\nYou pass by. The voice fades. Your caution serves you — this time.\n\nThe Shattered Realm awaits.',next:'w_begin',ef:{fl:'cautious_r',v:true}},
+ w_begin:{sp:'OPHIUCHUS',art:'🗺️',type:'advance',
+  tx:'The realm is yours. Navigate the world map — dark pulsing energy marks shadow encounters. Your zodiac skills grow stronger with each shadow faced.\n\nAnd your choices here... they echo forward.\n\n[Entering the Shattered Realm]',
+  next:null,ef:{act:'world'}},
+ pre_boss:{sp:'SHADOW RAT — void-whisper',art:'🐀',type:'choice',
+  tx:'"Ssss... another zodiac-born who thinks they can stop the Convergence? I am every stolen opportunity. Every path you never took. Every year that slipped past. I am the rat that gnawed the ropes of your potential.\n\nCome then. Feed me your light."',
+  choices:[
+   {tx:'"Your words are empty, shadow."',next:'pb_defiant'},
+   {tx:'"I know your weakness — and I am ready."',next:'pb_smart',fl:{k:'strategic',v:true}},
+  ]},
+ pb_defiant:{sp:'SHADOW RAT',art:'🐀',type:'advance',
+  tx:'"Bravado! I love the taste of bravado. It\'s spicy before the void.\n\nCome then!"\n\n[Shadow Rat enters combat — BEWARE high speed!]',
+  next:null,ef:{act:'battle',eid:'s_rat'}},
+ pb_smart:{sp:'SHADOW RAT',art:'🐀',type:'advance',
+  tx:'"What?! How could you — the guide told you? No matter. Knowledge does not equal victory!\n\n[Shadow Rat enters combat — Strategic knowledge grants +15% damage!]',
+  next:null,ef:{act:'battle',eid:'s_rat',bonus:.15}},
+ post_boss:{sp:'OPHIUCHUS',art:'🐍',type:'choice',
+  tx:'The Shadow Rat dissolves. From its remains, the original Rat spirit is freed — wit, adaptability, cunning — returned to the stars.\n\nThe shadow remnant pulses in the air before you. A choice remains.',
+  choices:[
+   {tx:'Absorb the shadow remnant for power.',next:'absorb',fl:{k:'taint',v:1}},
+   {tx:'Release it into the realm to heal it.',next:'release',fl:{k:'light',v:1}},
+  ]},
+ absorb:{sp:'OPHIUCHUS',art:'🌑',type:'advance',
+  tx:'The shadow essence flows into you — a surge of dark power. You feel stronger... and something else. A hunger at the edge of your being.\n\n[Shadow Absorbed: +12% ATK, shadow taint increases]',
+  next:null,ef:{act:'world',taint:true}},
+ release:{sp:'OPHIUCHUS',art:'🌟',type:'advance',
+  tx:'You release the shadow essence upward. The fractured stars catch it. A piece of the realm heals.\n\nA warmth in your chest. A steadiness in your step.\n\n[Released: +20 HP restored. Realm healed]',
+  next:null,ef:{act:'world',heal:20}},
+ pre_chimera:{sp:'OPHIUCHUS',art:'🌑',type:'choice',
+  tx:'You have faced eleven shadows. The twelfth has already merged with the others.\n\nThe Shadow Chimera — all twelve zodiac shadows fused into one being of absolute void — awakens before you. It is vast. It is hungry. It remembers every light it has ever consumed.\n\nThis is why the serpent staff was forged.',
+  choices:[
+   {tx:'Face it with the light I have gathered.',next:'pre_c_light',fl:{k:'final','v':'light'}},
+   {tx:'Offer my shadow power to weaken it from within.',next:'pre_c_shadow',fl:{k:'final',v:'shadow'}},
+   {tx:'Call upon Ophiuchus to face it together.',next:'pre_c_both',fl:{k:'final',v:'together'}},
+  ]},
+ pre_c_light:{sp:'OPHIUCHUS',art:'☀️',type:'advance',
+  tx:'"Pure light against pure shadow. This is the oldest battle in the cosmos."\n\nYou raise the serpent staff — both serpents glowing, East and West entwined — and charge.\n\n[FINAL BATTLE — Light Path. Full enemy power. Total victory if you win.]',
+  next:null,ef:{act:'final',path:'light'}},
+ pre_c_shadow:{sp:'OPHIUCHUS',art:'🌑',type:'advance',
+  tx:'"Careful. The shadow recognizes shadow. It may embrace you — or consume you."\n\nYou channel all absorbed dark essence. The Chimera hesitates — uncertain. Its power wavers.\n\n[FINAL BATTLE — Shadow Path. Enemy at 70% power. Shadow taint peaks.]',
+  next:null,ef:{act:'final',path:'shadow'}},
+ pre_c_both:{sp:'OPHIUCHUS',art:'🐍',type:'advance',
+  tx:'"...You would trust me with this? After all I did not tell you?"\n\nOphiuchus steps fully into the mortal plane — a vast figure of intertwined serpents — and stands beside you.\n\n"Then let us end this together."\n\n[FINAL BATTLE — Balanced Path. Enemy at 82% power. Ophiuchus assists.]',
+  next:null,ef:{act:'final',path:'together'}},
+ end_light_dlg:{sp:'OPHIUCHUS',art:'🌟',type:'advance',
+  tx:'The Chimera shatters. Twelve void-beasts dissolve into light simultaneously.\n\nBoth zodiac realms slowly untwist from each other. They will never be exactly as they were — but they will both live.\n\nAnd you stand at the center, the staff quiet in your hand.',
+  next:null,ef:{act:'ending',which:'light'}},
+ end_shadow_dlg:{sp:'OPHIUCHUS',art:'🌑',type:'advance',
+  tx:'The Chimera breaks — but the shadow power flows back into you. You did not destroy it. You absorbed it.\n\nYou are different now. You speak to the shadows that remain. Is this darkness? Or balance?\n\nOphiuchus watches. Even the serpent is unsure.',
+  next:null,ef:{act:'ending',which:'shadow'}},
+ end_both_dlg:{sp:'OPHIUCHUS',art:'⚕️',type:'advance',
+  tx:'Together — mortal zodiac-born and forgotten thirteenth sign — you unmake the Chimera.\n\nWhen the void clears, Ophiuchus is more solid than before. Your willingness to share the burden called them fully into being.\n\nBoth realms stabilize — not separate, but layered. East and West in careful harmony.',
+  next:null,ef:{act:'ending',which:'twilight'}},
+};
+
+// ═══════════════════════════════════════════════════
+//  GAME STATE
+// ═══════════════════════════════════════════════════
+const G={
+ scr:'menu',prev:'menu',
+ player:null,
+ battle:null,
+ snode:null,snext:null,seff:null,
+ flags:{},
+ map:null,mapSz:15,
+ pp:{x:1,y:1},
+ diff:1.0,
+ sgender:'M',
+ editTile:1,
+ edMap:null,
+ chapter:1,
+ bossIdx:0,
+ taint:0,realm:100,
+ defeated:[],
+ mapTouchOn:false,
+ logLines:[],
+};
+
+// ═══════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════
+function EB(el){const e=elemBonus(el);return e;}
+function elemBonus(el){
+ return({Fire:{ATK:15,SPD:8},Earth:{DEF:15,HP:12},Air:{SPD:15,LCK:8},
+         Water:{MP:15,DEF:8},Wood:{HP:15,ATK:8},Metal:{LCK:15,ATK:10}})[el]||{};
+}
+function qualMul(q){return({Cardinal:1.1,Fixed:1.15,Mutable:1.05})[q]||1;}
+function rng(min,max){return min+Math.random()*(max-min);}
+function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+function chinIdx(yr){return((parseInt(yr)-1900)%12+12)%12;}
+
+// ═══════════════════════════════════════════════════
+//  QUATERBASE4I  —  p=00  d=01  b=10  q=11
+//  Base β = 4i (pure-imaginary quaternary)
+//  Position weights: s[0]×1  s[1]×4i  s[2]×(4i)²=-16  s[3]×(4i)³=-64i
+//    → Re(strand) = s[0] − 16·s[2]
+//    → Im(strand) = 4·s[1] − 64·s[3]
+//  ×i rotation:  p→d  d→q  q→b  b→p
+//  ~ complement: p↔q  d↔b
+// ═══════════════════════════════════════════════════
+const QB4I={
+ G:'pdbq',
+ ROT:{p:'d',d:'q',q:'b',b:'p'},
+ CMP:{p:'q',d:'b',b:'d',q:'p'},
+ enc(n){n=Math.abs(Math.round(n))&0xFF;return[(n>>6)&3,(n>>4)&3,(n>>2)&3,n&3].map(v=>this.G[v]).join('');},
+ dec(s){return[...s].reduce((a,c,i)=>a|(this.G.indexOf(c)<<(6-i*2)),0);},
+ imag(s){return[...s].map(g=>this.ROT[g]??g).join('');},        // ×i
+ shadow(s){return[...s].map(g=>this.CMP[g]??g).join('');},      // ~
+ resonance(s){return this.dec(this.imag(s));},
+ complex(s){const d=[...s].map(g=>this.G.indexOf(g));return[d[3]-16*d[1],4*d[2]-64*d[0]];},
+ sig(p){return['ATK','DEF','SPD','HP','MP','LCK'].map(k=>`${k}:${this.enc(p.stats[k]||0)}`).join(' | ');},
+ shadowPow(p){return Math.round(['ATK','DEF','SPD','HP'].reduce((a,k)=>a+this.resonance(this.enc(p.stats[k]||0)),0)/4);},
+ pf(fmt,...args){
+  let ai=0;
+  return fmt.replace(/%([dsfqxi%])/g,(_,sp)=>{
+   if(sp==='%')return'%';const v=args[ai++];
+   if(sp==='d')return Math.round(+v);
+   if(sp==='s')return String(v);
+   if(sp==='f')return(+v).toFixed(2);
+   if(sp==='q')return this.enc(+v);           // quaterbase4i strand
+   if(sp==='x')return(+v).toString(16).padStart(2,'0').toUpperCase();
+   if(sp==='i')return this.imag(String(v));   // imaginary rotation
+   return'?';
+  });
+ }
+};
+
+// ═══════════════════════════════════════════════════
+//  printf() VM  —  SECRET DEBUG CONSOLE
+//  Activation: tap ⚕ 5× anywhere, or title 5×,
+//              or type "printf" in name field
+// ═══════════════════════════════════════════════════
+const VM={
+ mem:new Uint8Array(256),
+ hist:[],
+ _init:false,
+ init(){for(let i=0;i<256;i++)this.mem[i]=i;this._init=true;},
+ _col(s){
+  return s
+   .replace(/<G>/g,'<span style="color:#1aaf8c">').replace(/<\/G>/g,'</span>')
+   .replace(/<T>/g,'<span style="color:#1aaf8c">').replace(/<\/T>/g,'</span>')
+   .replace(/<P>/g,'<span style="color:#8b3fe8">').replace(/<\/P>/g,'</span>')
+   .replace(/<Y>/g,'<span style="color:#d4a017">').replace(/<\/Y>/g,'</span>')
+   .replace(/<R>/g,'<span style="color:#e74c3c">').replace(/<\/R>/g,'</span>')
+   .replace(/<D>/g,'<span style="color:#6a5a90">').replace(/<\/D>/g,'</span>');
+ },
+ log(ln){
+  const el=document.getElementById('vm-out');if(!el)return;
+  const d=document.createElement('div');
+  d.className='vm-ln';
+  d.innerHTML=this._col(ln.replace(/</g,'&lt;').replace(/&lt;(\/?(?:G|T|P|Y|R|D|b|\/b|span[^>]*)>)/g,'<$1'));
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+ },
+ exec(raw){
+  if(!raw.trim())return;
+  this.hist=[raw,...this.hist.slice(0,24)];
+  this.log(`<G>&gt; ${raw}</G>`);
+  const pts=raw.trim().split(/\s+/),op=pts[0].toLowerCase();
+  const p=G.player;
+
+  if(op==='printf'){
+   const m=raw.match(/printf\("([^"]*)"(,(.+))?\)/);
+   if(!m){this.log('Usage: printf("fmt %d %q", ATK, 42)');return;}
+   const fmt=m[1],argStr=m[3]||'';
+   const args=argStr.split(',').map(s=>{
+    s=s.trim().replace(/['"]/g,'');
+    if(p?.stats?.[s]!==undefined)return p.stats[s];
+    if(!isNaN(s))return Number(s);return s;
+   }).filter(Boolean);
+   this.log(QB4I.pf(fmt,...args));return;
+  }
+
+  switch(op){
+   case 'help':
+    ['printf("fmt"[,args])  — QB4I-aware formatted print (%d %s %q %x %i)',
+     'encode <0-255>        — byte → p/d/b/q strand',
+     'decode <strand>       — strand → int + [Re, Im] complex',
+     'imag <strand>         — ×i imaginary rotation of strand',
+     'shadow <strand>       — additive complement ~strand',
+     'complex <strand>      — base-4i [Re, Im] components',
+     'sig                   — player full genetic signature',
+     'stats                 — all stats as QB4I strands + complex',
+     'dump                  — 256-byte VM memory (hex + strand)',
+     'write <addr> <val>    — poke byte to VM memory',
+     'read <addr>           — peek byte from VM memory',
+     'cheat <hp|mp|xp>     — restore resource (secret)',
+     'clear                 — clear console output',
+    ].forEach(l=>this.log(`<D>  ${l}</D>`));break;
+
+   case 'encode':{
+    const n=parseInt(pts[1]);if(isNaN(n)){this.log('encode <0-255>');break;}
+    const s=QB4I.enc(n);
+    const[re,im]=QB4I.complex(s);
+    this.log(`${String(n).padStart(3)} → <b>${s}</b>  ×i:<P>${QB4I.imag(s)}</P>  ~:<T>${QB4I.shadow(s)}</T>  [Re=${re} Im=${im}i]`);
+    break;}
+
+   case 'decode':{
+    const s=pts[1]||'';if(!/^[pdbq]+$/.test(s)){this.log('decode <pdbq…>');break;}
+    const[re,im]=QB4I.complex(s);
+    this.log(`${s} → ${QB4I.dec(s)}  res:<P>${QB4I.resonance(s)}</P>  [Re=${re} Im=${im}i]`);break;}
+
+   case 'imag':
+    this.log(`imag(<b>${pts[1]||'pdbq'}</b>) = <P>${QB4I.imag(pts[1]||'pdbq')}</P>`);break;
+
+   case 'shadow':
+    this.log(`shadow(<b>${pts[1]||'pdbq'}</b>) = <T>${QB4I.shadow(pts[1]||'pdbq')}</T>`);break;
+
+   case 'complex':{
+    const s=pts[1]||'pppp';const[re,im]=QB4I.complex(s);
+    this.log(`${s} → Re=<G>${re}</G>  Im=<P>${im}i</P>`);break;}
+
+   case 'sig':
+    if(!p){this.log('No player loaded.');break;}
+    this.log(`<Y>◈ ${p.name} — Genetic Signature (QB4I)</Y>`);
+    this.log(QB4I.sig(p));
+    this.log(`Shadow Resonance: <P>${QB4I.shadowPow(p)}</P>`);break;
+
+   case 'stats':
+    if(!p){this.log('No player.');break;}
+    ['HP','MP','ATK','DEF','SPD','LCK'].forEach(k=>{
+     const v=p.stats[k]||0,s=QB4I.enc(v),[re,im]=QB4I.complex(s);
+     this.log(`<b>${k.padEnd(4)}</b>${String(v).padStart(3)} → <b>${s}</b>  ×i:<P>${QB4I.imag(s)}</P>  [${re},${im}i]`);
+    });break;
+
+   case 'dump':
+    this.log('<Y>◈ VM MEMORY DUMP — 256 bytes  (hex | QB4I strand)</Y>');
+    for(let i=0;i<256;i+=8){
+     const h=Array.from({length:8},(_,j)=>this.mem[i+j].toString(16).padStart(2,'0')).join(' ');
+     const s=Array.from({length:8},(_,j)=>QB4I.enc(this.mem[i+j])).join(' ');
+     this.log(`<D>0x${i.toString(16).padStart(2,'0')}</D>  ${h}  <P>${s}</P>`);
+    }break;
+
+   case 'write':{
+    const addr=parseInt(pts[1],16)||parseInt(pts[1]),val=parseInt(pts[2]);
+    if(isNaN(addr)||isNaN(val)){this.log('write <addr> <val>');break;}
+    this.mem[addr&0xFF]=val&0xFF;
+    this.log(`mem[0x${(addr&0xFF).toString(16).padStart(2,'0')}] ← ${val}  <G>(${QB4I.enc(val)})</G>`);break;}
+
+   case 'read':{
+    const addr=parseInt(pts[1],16)||parseInt(pts[1]),v=this.mem[addr&0xFF];
+    this.log(`mem[0x${(addr&0xFF).toString(16).padStart(2,'0')}] = ${v}  <G>(${QB4I.enc(v)})</G>`);break;}
+
+   case 'cheat':
+    if(!p){this.log('No player.');break;}
+    if(pts[1]==='hp'){p.stats.HP=p.stats.maxHP;this.log('<T>HP fully restored.</T>');}
+    else if(pts[1]==='mp'){p.stats.MP=p.stats.maxMP;this.log('<P>MP fully restored.</P>');}
+    else if(pts[1]==='xp'){p.exp=p.expNext-1;this.log('<Y>EXP maxed — level up next battle.</Y>');}
+    else this.log('cheat <hp|mp|xp>');
+    // Re-render battle bars if active
+    if(G.battle)renderBattle();
+    break;
+
+   case 'clear':
+    document.getElementById('vm-out').innerHTML='';break;
+
+   default:
+    this.log(`<R>Unknown: ${op} — type "help"</R>`);
+  }
+ }
+};
+
+// Open / close VM console
+let _tapCount=0,_tapTimer=null;
+function secretTap(){
+ _tapCount++;
+ const el=document.getElementById('secret-h1')||document.getElementById('oph-center');
+ if(el){el.classList.add('secret-tap');setTimeout(()=>el.classList.remove('secret-tap'),300);}
+ notify(`⚕ ${_tapCount}/5 — printf() VM`);
+ if(_tapTimer)clearTimeout(_tapTimer);
+ _tapTimer=setTimeout(()=>_tapCount=0,2500);
+ if(_tapCount>=5){_tapCount=0;openVM();}
+}
+
+function openVM(){
+ if(!VM._init){
+  VM.init();
+  VM.log('<Y>◈ OPHIUCHUS printf() VM — ONLINE</Y>');
+  VM.log('<G>quaterbase4i: p=00  d=01  b=10  q=11</G>');
+  VM.log('<D>×i: p→d→q→b→p  |  ~: p↔q d↔b  |  base β=4i</D>');
+  VM.log('<D>type "help" for all commands</D>');
+ }
+ document.getElementById('vm-ov').classList.add('open');
+ setTimeout(()=>document.getElementById('vm-in')?.focus(),100);
+}
+
+function closeVM(){document.getElementById('vm-ov').classList.remove('open');}
+
+function runVM(){
+ const inp=document.getElementById('vm-in');
+ if(!inp?.value.trim())return;
+ VM.exec(inp.value);inp.value='';
+}
+
+function vmExec(cmd){VM.exec(cmd);}
+
+// Check for "printf" typed into name input
+function handleNameInput(val){
+ document.getElementById('in-name').value=val;
+ updatePrev();
+ if(val.toLowerCase().endsWith('printf')){
+  openVM();
+  VM.log('<Y>◈ printf() detected in name field — VM auto-opened!</Y>');
+ }
+}
+
+// ═══════════════════════════════════════════════════
+//  STAT GENERATION
+// ═══════════════════════════════════════════════════
+function genStats(w,c,gender){
+ let s={HP:100,MP:50,ATK:25,DEF:22,SPD:22,LCK:12};
+ [elemBonus(w.el),elemBonus(c.el)].forEach(b=>{
+  Object.entries(b).forEach(([k,v])=>s[k]=(s[k]||0)+v);
+ });
+ const qm=qualMul(w.q);
+ s.ATK=Math.round(s.ATK*qm);s.DEF=Math.round(s.DEF*qm);s.SPD=Math.round(s.SPD*qm);
+ if(gender==='F'){s.MP+=10;s.LCK+=5;}else{s.HP+=10;s.ATK+=5;}
+ s.maxHP=s.HP;s.maxMP=s.MP;
+ return s;
+}
+
+function genSkills(wel,cel){
+ const em={Fire:['fire_strike','fire_aoe'],Earth:['earth_shield','earth_quake'],
+           Air:['air_slash','air_dodge'],Water:['water_heal','water_drain'],
+           Wood:['wood_grow','wood_thorn'],Metal:['metal_cut','metal_luck']};
+ const sk=[...(em[wel]||[])];
+ if(cel!==wel&&em[cel])sk.push(em[cel][0]);
+ sk.push('serpent_bind');
+ return sk.filter(Boolean).slice(0,4);
+}
+
+function genChar(mo,yr,gender,name){
+ const w=WZ[parseInt(mo)];
+ const ci=chinIdx(yr);const c=CZ[ci];
+ const s=genStats(w,c,gender);
+ const sk=genSkills(w.el,c.el);
+ return{name:name||'Hero',gender,month:parseInt(mo),year:parseInt(yr),w,c,
+  title:`The ${w.name}-${c.name}`,stats:s,skills:sk,
+  buffs:{},eDot:0,pDot:0,regen:0,evade:false,stunned:false,defending:false,
+  level:1,exp:0,expNext:100,
+  items:[{id:'potion',name:'Healing Draught',uses:3,ic:'🧪'}],
+  taint:0,wins:0};
+}
+
+// ═══════════════════════════════════════════════════
+//  SCREEN MANAGEMENT
+// ═══════════════════════════════════════════════════
+function SS(id){
+ G.prev=G.scr;G.scr=id;
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ const el=document.getElementById('s-'+id);
+ if(el)el.classList.add('active');
+}
+function goBack(){SS(G.prev||'menu');}
+
+// ═══════════════════════════════════════════════════
+//  NOTIFICATION
+// ═══════════════════════════════════════════════════
+let _nt=null;
+function notify(msg,dur=2200){
+ const el=document.getElementById('notif');
+ el.textContent=msg;el.classList.add('show');
+ if(_nt)clearTimeout(_nt);
+ _nt=setTimeout(()=>el.classList.remove('show'),dur);
+}
+
+// ═══════════════════════════════════════════════════
+//  MENU ACTIONS
+// ═══════════════════════════════════════════════════
+function startNew(){
+ G.flags={};G.taint=0;G.realm=100;G.chapter=1;G.bossIdx=0;G.defeated=[];G.logLines=[];
+ SS('create');updatePrev();
+}
+
+function loadGame(){
+ const d=localStorage.getItem('oph_save');
+ if(!d){notify('No save found.');return;}
+ try{
+  const sv=JSON.parse(d);
+  G.player=sv.player;G.flags=sv.flags||{};G.map=sv.map;
+  G.pp=sv.pp||{x:1,y:1};G.chapter=sv.chapter||1;
+  G.taint=sv.taint||0;G.realm=sv.realm||100;
+  G.bossIdx=sv.bossIdx||0;G.defeated=sv.defeated||[];
+  notify('Game loaded! ✓');SS('world');initMap();
+ }catch(e){notify('Save corrupted — starting fresh.');startNew();}
+}
+
+function saveGame(){
+ if(!G.player)return;
+ const sv={player:G.player,flags:G.flags,map:G.map,pp:G.pp,
+  chapter:G.chapter,taint:G.taint,realm:G.realm,bossIdx:G.bossIdx,defeated:G.defeated};
+ localStorage.setItem('oph_save',JSON.stringify(sv));
+}
+
+// ═══════════════════════════════════════════════════
+//  CHARACTER CREATION
+// ═══════════════════════════════════════════════════
+function selGender(g){
+ G.sgender=g;
+ document.getElementById('gb-m').classList.toggle('sel',g==='M');
+ document.getElementById('gb-f').classList.toggle('sel',g==='F');
+ updatePrev();
+}
+
+function updatePrev(){
+ const mo=parseInt(document.getElementById('in-mo').value)||1;
+ const yr=parseInt(document.getElementById('in-yr').value)||1990;
+ const nm=document.getElementById('in-name').value||'Hero';
+ if(yr<1900||yr>2100||isNaN(yr))return;
+ const w=WZ[mo];const c=CZ[chinIdx(yr)];
+ const s=genStats(w,c,G.sgender);
+ const sk=genSkills(w.el,c.el);
+ document.getElementById('pv-ico').textContent=`${w.ic} ⚕️ ${c.ic}`;
+ document.getElementById('pv-nm').textContent=nm;
+ document.getElementById('pv-tt').textContent=`${w.sym} ${w.name} · ${c.ic} ${c.name}`;
+ document.getElementById('pv-st').innerHTML=
+  [['HP',s.HP],['MP',s.MP],['ATK',s.ATK],['DEF',s.DEF],['SPD',s.SPD],['LCK',s.LCK]]
+  .map(([k,v])=>`<div class="sc"><div class="sl">${k}</div><div class="sv">${v}</div></div>`).join('');
+ document.getElementById('pv-sk').innerHTML='<b style="color:var(--gold)">Skills:</b> '+
+  sk.map(id=>SK[id]?`${SK[id].ic} ${SK[id].n}`:'?').join(' · ');
+}
+
+function confirmChar(){
+ const nm=document.getElementById('in-name').value.trim();
+ const mo=parseInt(document.getElementById('in-mo').value);
+ const yr=parseInt(document.getElementById('in-yr').value);
+ if(!nm){notify('Please enter your name!');return;}
+ if(!yr||yr<1900||yr>2100){notify('Enter a valid birth year!');return;}
+ G.player=genChar(mo,yr,G.sgender,nm);
+ G.map=DEF_MAP.map(r=>[...r]);
+ G.pp={x:1,y:1};
+ showNode('intro');
+}
+
+// ═══════════════════════════════════════════════════
+//  STORY SYSTEM
+// ═══════════════════════════════════════════════════
+function showNode(key){
+ SS('story');
+ const nd=NODES[key];
+ if(!nd){SS('world');initMap();return;}
+ G.snode=key;
+ document.getElementById('s-art').textContent=nd.art||'🌑';
+ document.getElementById('dlg-sp').textContent=nd.sp||'???';
+ let tx=nd.tx||'';
+ if(G.player)tx=tx.replace(/\[PLAYER\]/g,G.player.name);
+ document.getElementById('dlg-tx').textContent=tx;
+ const ch=document.getElementById('dlg-ch');
+ const adv=document.getElementById('dlg-adv');
+ ch.innerHTML='';
+ if(nd.type==='choice'&&nd.choices){
+  adv.style.display='none';
+  nd.choices.forEach(c=>{
+   const b=document.createElement('button');
+   b.className='ch-btn';b.textContent=c.tx;
+   b.onclick=()=>makeChoice(c);ch.appendChild(b);
+  });
+ }else{
+  adv.style.display='block';
+  G.snext=nd.next;G.seff=nd.ef||null;
+ }
+}
+
+function advance(){
+ const ef=G.seff;const nx=G.snext;
+ G.seff=null;G.snext=null;
+ if(ef)handleEff(ef,nx);
+ else if(nx)showNode(nx);
+ else{SS('world');initMap();}
+}
+
+function makeChoice(c){
+ if(c.fl)G.flags[c.fl.k]=c.fl.v;
+ showNode(c.next);
+}
+
+function handleEff(ef,fallbackNext){
+ if(ef.fl)G.flags[ef.fl]=(ef.v!==undefined?ef.v:true);
+ if(ef.taint){G.taint++;if(G.player){G.player.taint++;G.player.stats.ATK=Math.round(G.player.stats.ATK*1.12);}}
+ if(ef.heal&&G.player){
+  G.player.stats.HP=Math.min(G.player.stats.maxHP,G.player.stats.HP+(ef.heal||20));
+  G.player.stats.MP=Math.min(G.player.stats.maxMP,G.player.stats.MP+8);
+ }
+ switch(ef.act){
+  case 'world':SS('world');initMap();break;
+  case 'battle':startBattle(ef.eid,ef.bonus||0);break;
+  case 'final':startFinal(ef.path);break;
+  case 'ending':showEnding(ef.which);break;
+  default:if(fallbackNext)showNode(fallbackNext);else{SS('world');initMap();}
+ }
+}
+
+// ═══════════════════════════════════════════════════
+//  BATTLE SYSTEM
+// ═══════════════════════════════════════════════════
+function startBattle(eid,bonus=0){
+ let tmpl=[...SB,...WE,CHIMERA].find(e=>e.id===eid);
+ if(!tmpl){console.warn('Enemy not found:',eid);return;}
+ const df=G.diff||1;
+ const en={
+  ...tmpl,
+  stats:{...tmpl.stats,
+   HP:Math.round(tmpl.stats.HP*df),ATK:Math.round(tmpl.stats.ATK*df),
+   DEF:Math.round(tmpl.stats.DEF*df),SPD:Math.round(tmpl.stats.SPD*df),MP:tmpl.stats.MP},
+ };
+ en.stats.maxHP=en.stats.HP;
+ en.buffs={};en.stunned=false;en.dot=0;
+ if(G.flags.guide)bonus+=.2;
+ G.battle={en,bonus,eid,turn:1,phase:0,log:[],over:false,pBufs:{},eBufs:{},pDot:0,eDot:0,pRegen:0};
+ G.logLines=[];
+ SS('battle');renderBattle();
+}
+
+function startFinal(path){
+ const ch={...CHIMERA,stats:{...CHIMERA.stats}};
+ ch.stats.maxHP=ch.stats.HP;
+ if(path==='shadow')ch.stats.HP=ch.stats.maxHP=Math.round(ch.stats.HP*.7);
+ else if(path==='together')ch.stats.HP=ch.stats.maxHP=Math.round(ch.stats.HP*.82);
+ ch.buffs={};ch.stunned=false;ch.dot=0;
+ G.battle={en:ch,bonus:0,eid:'chimera',turn:1,phase:0,log:[],over:false,
+  pBufs:{},eBufs:{},pDot:0,eDot:0,pRegen:0,isFinal:true,path};
+ G.logLines=[];
+ SS('battle');renderBattle();
+}
+
+function pct(cur,max){return Math.max(0,Math.min(100,(cur/max)*100));}
+
+function renderBattle(){
+ if(!G.battle)return;
+ const{en,isFinal}=G.battle;const p=G.player;
+ const es=en.stats;const ps=p.stats;
+ document.getElementById('bt-ch').textContent=`Chapter ${G.chapter}`;
+ document.getElementById('bt-tag').style.display=en.isBoss?'block':'none';
+ document.getElementById('bt-ei').textContent=en.ic;
+ document.getElementById('bt-en').textContent=en.name;
+ document.getElementById('bt-ehp').textContent=`${Math.max(0,es.HP)}/${es.maxHP}`;
+ document.getElementById('bt-ebar').style.width=pct(es.HP,es.maxHP)+'%';
+ document.getElementById('bt-pn').textContent=`${p.name} ${p.w.sym}${p.c.ic} Lv.${p.level}`;
+ document.getElementById('bt-php').textContent=`${Math.max(0,ps.HP)}/${ps.maxHP}`;
+ document.getElementById('bt-pbar').style.width=pct(ps.HP,ps.maxHP)+'%';
+ document.getElementById('bt-pmp').textContent=`${Math.max(0,ps.MP)}/${ps.maxMP}`;
+ document.getElementById('bt-pmbar').style.width=pct(ps.MP,ps.maxMP)+'%';
+ // Status
+ const sts=document.getElementById('bt-sts');sts.innerHTML='';
+ if(G.battle.pDot>0)sts.innerHTML+=`<div class="st-b">☠️ Poison <span>${G.battle.pDot}</span></div>`;
+ if(G.battle.pRegen>0)sts.innerHTML+=`<div class="st-b">🌿 Regen <span>${G.battle.pRegen}</span></div>`;
+ if(p.defending)sts.innerHTML+=`<div class="st-b">🛡️ Guard</div>`;
+ if(p.evade)sts.innerHTML+=`<div class="st-b">🌀 Evade</div>`;
+ // Buttons
+ const ac=document.getElementById('bt-act');ac.innerHTML='';
+ // Skills
+ (p.skills||[]).forEach((sid,i)=>{
+  const sk=SK[sid];if(!sk)return;
+  addBatBtn(ac,`${sk.ic} ${sk.n}`,sk.c>0?`${sk.c} MP`:'',`sk${i+1}`,()=>doSkill(sid),ps.MP<sk.c);
+ });
+ // Attack
+ addBatBtn(ac,'⚔️ Attack','Basic',  'atk',()=>doAttack());
+ // Item
+ const pot=p.items.find(i=>i.id==='potion'&&i.uses>0);
+ addBatBtn(ac,`🧪 Draught ×${pot?pot.uses:0}`,'Heal 40%','itm',()=>doItem(),!pot||!pot.uses);
+ // Defend
+ addBatBtn(ac,'🛡️ Defend','−50% dmg','dfn',()=>doDefend());
+ // Flee (only non-boss)
+ if(!en.isBoss)addBatBtn(ac,'💨 Flee','50%','fl',()=>doFlee());
+}
+
+function addBatBtn(container,nm,sub,cls,cb,disabled=false){
+ const b=document.createElement('button');
+ b.className='sk-btn '+cls;b.disabled=disabled;
+ b.innerHTML=`<span class="sn">${nm}</span>${sub?`<span class="sc2">${sub}</span>`:''}`;
+ b.onclick=cb;container.appendChild(b);
+}
+
+function setLog(msg){
+ G.logLines=[msg];
+ document.getElementById('bt-log').innerHTML=G.logLines.join('<br>');
+}
+function addLog(msg){
+ G.logLines.push(msg);
+ if(G.logLines.length>3)G.logLines.shift();
+ document.getElementById('bt-log').innerHTML=G.logLines.join('<br>');
+}
+
+function dmgCalc(atk,def,mult,pierce=0){
+ const eDef=def*(1-pierce);
+ const raw=Math.max(1,atk*mult-eDef*.45);
+ return Math.max(1,Math.round(raw*rng(.85,1.15)));
+}
+
+function lockBtns(lock){
+ document.querySelectorAll('.sk-btn').forEach(b=>b.disabled=lock);
+}
+
+// Player actions
+function doAttack(){
+ if(!G.battle||G.battle.over)return;lockBtns(true);
+ const{en,pBufs,bonus}=G.battle;const p=G.player;
+ const atk=Math.round(p.stats.ATK*(pBufs.ATK||1));
+ const dmg=Math.round(dmgCalc(atk,en.stats.DEF,1.0)*(1+bonus+G.taint*.05));
+ en.stats.HP-=dmg;
+ setLog(`⚔️ ${p.name} attacks for <span style="color:var(--redb)">${dmg}</span>!`);
+ afterPlayerAction();
+}
+
+function doSkill(sid){
+ if(!G.battle||G.battle.over)return;
+ const sk=SK[sid];if(!sk)return;
+ const p=G.player;
+ if(p.stats.MP<sk.c){notify('Not enough MP!');return;}
+ lockBtns(true);
+ p.stats.MP-=sk.c;
+ const log=applySkill(sk,p,G.battle.en,G.battle,true);
+ setLog(log);
+ afterPlayerAction();
+}
+
+function doItem(){
+ if(!G.battle||G.battle.over)return;
+ const p=G.player;
+ const pot=p.items.find(i=>i.id==='potion'&&i.uses>0);
+ if(!pot){notify('No items!');return;}
+ lockBtns(true);pot.uses--;
+ const h=Math.round(p.stats.maxHP*.4);
+ p.stats.HP=Math.min(p.stats.maxHP,p.stats.HP+h);
+ setLog(`🧪 Healing Draught — restored <span style="color:var(--teal)">${h} HP</span>!`);
+ afterPlayerAction();
+}
+
+function doDefend(){
+ if(!G.battle||G.battle.over)return;lockBtns(true);
+ G.player.defending=true;
+ setLog('🛡️ Defensive stance — incoming damage halved!');
+ afterPlayerAction();
+}
+
+function doFlee(){
+ if(!G.battle||G.battle.over)return;lockBtns(true);
+ const p=G.player;const en=G.battle.en;
+ const ch=.5+clamp((p.stats.SPD-en.stats.SPD)*.01,-.3,.3);
+ if(Math.random()<ch){
+  setLog('💨 Escaped successfully!');
+  setTimeout(()=>{G.battle=null;SS('world');initMap();},1100);
+ }else{setLog('💨 Failed to escape!');afterPlayerAction();}
+}
+
+function afterPlayerAction(){
+ const bat=G.battle;const p=G.player;
+ // Player DoT heal
+ if(bat.pRegen>0){
+  const rh=Math.round(p.stats.maxHP*.1);
+  p.stats.HP=Math.min(p.stats.maxHP,p.stats.HP+rh);
+  addLog(`🌿 Regen restores <span style="color:var(--teal)">${rh} HP</span>.`);
+  bat.pRegen--;
+ }
+ renderBattle();
+ if(G.battle.en.stats.HP<=0){
+  G.battle.en.stats.HP=0;renderBattle();
+  setTimeout(onVictory,700);return;
+ }
+ // Chimera phase check
+ if(bat.isFinal&&CHIMERA.phases){
+  CHIMERA.phases.forEach((ph,i)=>{
+   if(i>=bat.phase&&bat.en.stats.HP/bat.en.stats.maxHP<=ph.pct){
+    bat.phase=i+1;
+    bat.en.stats.ATK=Math.round(bat.en.stats.ATK*ph.mul);
+    setTimeout(()=>addLog(`<span style="color:var(--redb)">⚠ ${ph.msg}</span>`),500);
+   }
+  });
+ }
+ setTimeout(enemyTurn,900);
+}
+
+// Skill application (generic, works for player & enemy)
+function applySkill(sk,atk,def,bat,isPlayer){
+ const aS=atk.stats;const dS=def.stats;
+ const aBufs=isPlayer?(bat.pBufs||{}):(bat.eBufs||{});
+ const dBufs=isPlayer?(bat.eBufs||{}):(bat.pBufs||{});
+ const atkVal=Math.round(aS.ATK*(aBufs.ATK||1));
+ const defVal=Math.round(dS.DEF*(dBufs.DEF||1));
+ let log='';
+ switch(sk.t){
+  case 'dmg':{
+   const d=Math.round(dmgCalc(atkVal,defVal,sk.m||1)*(isPlayer?(1+G.battle.bonus+G.taint*.05):1));
+   dS.HP-=d;log=`${sk.ic} <b>${sk.n}</b> — <span style="color:var(--redb)">${d}</span> damage!`;break;}
+  case 'dmg_pierce':{
+   const d=Math.round(dmgCalc(atkVal,defVal,sk.m||1,sk.p||.5)*(isPlayer?(1+G.battle.bonus):1));
+   dS.HP-=d;log=`${sk.ic} <b>${sk.n}</b> — pierces for <span style="color:var(--redb)">${d}</span>!`;break;}
+  case 'dmg_dot':{
+   const d=Math.round(dmgCalc(atkVal,defVal,sk.m||1)*(isPlayer?(1+G.battle.bonus):1));
+   dS.HP-=d;if(isPlayer)bat.eDot=(bat.eDot||0)+2;else bat.pDot=(bat.pDot||0)+2;
+   log=`${sk.ic} <b>${sk.n}</b> — ${d} dmg + poisoned!`;break;}
+  case 'dmg_debuff':{
+   const d=Math.round(dmgCalc(atkVal,defVal,sk.m||1)*(isPlayer?(1+G.battle.bonus):1));
+   dS.HP-=d;dBufs.ATK=(dBufs.ATK||1)*.8;
+   log=`${sk.ic} <b>${sk.n}</b> — ${d} dmg, ATK −20%!`;break;}
+  case 'dmg_spd':{
+   const d=Math.round(dmgCalc(atkVal,defVal,sk.m||1)*(isPlayer?(1+G.battle.bonus):1));
+   dS.HP-=d;if(isPlayer)bat.pBufs.SPD=(bat.pBufs.SPD||1)*1.2;
+   log=`${sk.ic} <b>${sk.n}</b> — ${d} dmg, SPD up!`;break;}
+  case 'heal':{
+   const h=Math.round(aS.maxHP*(sk.pct||.35));
+   aS.HP=Math.min(aS.maxHP,aS.HP+h);
+   log=`${sk.ic} <b>${sk.n}</b> — <span style="color:var(--teal)">+${h} HP</span>!`;break;}
+  case 'self_heal':{
+   const h=Math.round(aS.maxHP*(sk.pct||.2));
+   aS.HP=Math.min(aS.maxHP,aS.HP+h);
+   log=`${sk.ic} <b>${sk.n}</b> — heals ${h} HP!`;break;}
+  case 'drain':{
+   const d=Math.round(dmgCalc(atkVal,defVal,sk.m||1)*(isPlayer?(1+G.battle.bonus):1));
+   const dr=Math.round(d*.5);dS.HP-=d;aS.HP=Math.min(aS.maxHP,aS.HP+dr);
+   log=`${sk.ic} <b>${sk.n}</b> — drains ${d}, restores ${dr}!`;break;}
+  case 'buff':{
+   aBufs[sk.st]=(aBufs[sk.st]||1)+(sk.bv||.3);
+   log=`${sk.ic} <b>${sk.n}</b> — ${sk.st} raised!`;break;}
+  case 'debuff':{
+   dBufs[sk.st]=(dBufs[sk.st]||1)*(1-(sk.rv||.2));
+   log=`${sk.ic} <b>${sk.n}</b> — ${def.name||'enemy'} ${sk.st} lowered!`;break;}
+  case 'evade':{
+   if(isPlayer)G.player.evade=true;
+   log=`${sk.ic} <b>${sk.n}</b> — will evade next hit!`;break;}
+  case 'stun':{
+   const d=Math.round(dmgCalc(atkVal,defVal,sk.m||1)*(isPlayer?(1+G.battle.bonus):1));
+   dS.HP-=d;if(!isPlayer)G.player.stunned=false;else bat.en.stunned=true;
+   log=`${sk.ic} <b>${sk.n}</b> — ${d} dmg + stunned!`;break;}
+  case 'regen':{
+   if(isPlayer)bat.pRegen=(bat.pRegen||0)+(sk.tr||3);
+   log=`${sk.ic} <b>${sk.n}</b> — regen ${sk.tr||3} turns!`;break;}
+  default:{
+   const d=Math.round(dmgCalc(atkVal,defVal,1.0)*(isPlayer?(1+G.battle.bonus):1));
+   dS.HP-=d;log=`${sk.ic} <b>${sk.n}</b> — ${d} damage!`;}
+ }
+ return log;
+}
+
+function enemyTurn(){
+ if(!G.battle||G.battle.over)return;
+ const bat=G.battle;const en=bat.en;const p=G.player;
+ // Player stun check
+ if(p.stunned){p.stunned=false;addLog('💤 You shook off the stun!');renderBattle();return;}
+ // Enemy stunned check
+ if(en.stunned){en.stunned=false;addLog(`💤 ${en.name} is stunned — misses turn!`);renderBattle();return;}
+ // Enemy DoT
+ if(bat.eDot>0){
+  const dd=Math.round(en.stats.maxHP*.05);
+  en.stats.HP-=dd;bat.eDot--;
+  addLog(`☠️ Poison: ${dd} to ${en.name}!`);
+  if(en.stats.HP<=0){en.stats.HP=0;renderBattle();setTimeout(onVictory,600);return;}
+ }
+ // Player DoT
+ if(bat.pDot>0){
+  const pd=Math.round(p.stats.maxHP*.05);
+  p.stats.HP-=pd;bat.pDot--;
+  addLog(`☠️ Poison: <span style="color:var(--redb)">${pd}</span> to you!`);
+ }
+ // Pick skill
+ const avail=(en.sk||['strike']).filter(s=>SK[s]);
+ let sid;
+ if(en.stats.HP<en.stats.maxHP*.28&&avail.some(s=>['null_heal','chaos_absorb','self_heal'].includes(s))){
+  sid=avail.find(s=>['null_heal','chaos_absorb'].includes(s))||avail[0];
+ }else{sid=avail[Math.floor(Math.random()*avail.length)];}
+ const sk=SK[sid];
+ // Evade check
+ if(p.evade&&Math.random()<.55){
+  p.evade=false;
+  addLog(`✨ You evade ${en.name}'s ${sk.n}!`);
+  renderBattle();return;
+ }
+ p.evade=false;
+ // Apply skill
+ const hpBefore=p.stats.HP;
+ const log=applySkill(sk,en,p,bat,false);
+ // Defend reduction
+ if(p.defending){
+  const taken=hpBefore-p.stats.HP;
+  if(taken>0){p.stats.HP+=Math.round(taken*.5);} // restore half
+ }
+ p.defending=false;
+ addLog(`${en.ic} ${log}`);
+ bat.turn++;
+ renderBattle();
+ if(p.stats.HP<=0){p.stats.HP=0;renderBattle();setTimeout(onDefeat,700);}
+}
+
+function onVictory(){
+ if(!G.battle)return;
+ const bat=G.battle;const p=G.player;const en=bat.en;
+ p.wins=(p.wins||0)+1;
+ const xp=Math.round(en.stats.maxHP*.5);p.exp+=xp;
+ let lvMsg='';
+ while(p.exp>=p.expNext){
+  p.level++;p.exp-=p.expNext;p.expNext=Math.round(p.expNext*1.55);
+  p.stats.maxHP+=14;p.stats.HP=p.stats.maxHP;p.stats.maxMP+=7;p.stats.MP=p.stats.maxMP;
+  p.stats.ATK+=4;p.stats.DEF+=3;p.stats.SPD+=3;
+  lvMsg=` 🌟 <b>LEVEL UP — Lv.${p.level}!</b>`;
+ }
+ p.stats.HP=Math.min(p.stats.maxHP,p.stats.HP+Math.round(p.stats.maxHP*.2));
+ p.stats.MP=Math.min(p.stats.maxMP,p.stats.MP+Math.round(p.stats.maxMP*.3));
+ setLog(`<span style="color:var(--gold)">✨ Victory! +${xp} EXP${lvMsg}</span>`);
+ renderBattle();
+ const eid=bat.eid;const wasFinal=bat.isFinal;const path=bat.path;
+ const wasWild=WE.find(e=>e.id===eid);
+ G.battle=null;
+ setTimeout(()=>{
+  if(wasFinal){
+   // Final boss — ending
+   const endMap={light:'end_light_dlg',shadow:'end_shadow_dlg',together:'end_both_dlg'};
+   showNode(endMap[path]||'end_light_dlg');
+  }else if(SB.find(e=>e.id===eid)){
+   // Shadow boss defeated
+   G.defeated.push(eid);G.bossIdx++;
+   if(G.bossIdx>=SB.length){
+    // All bosses done → chimera
+    showNode('pre_chimera');
+   }else{showNode('post_boss');}
+  }else{
+   SS('world');initMap();
+  }
+ },1500);
+}
+
+function onDefeat(){
+ setLog('<span style="color:var(--redb)">💀 You fell. The void claims you... for now.</span>');
+ const p=G.player;
+ p.stats.HP=Math.round(p.stats.maxHP*.5);p.stats.MP=Math.round(p.stats.maxMP*.5);
+ renderBattle();
+ const ac=document.getElementById('bt-act');ac.innerHTML='';
+ const b=document.createElement('button');b.className='btn btn-g';
+ b.style.gridColumn='span 2';b.textContent='↺ Rise Again';
+ b.onclick=()=>{G.battle=null;SS('world');initMap();};
+ ac.appendChild(b);
+}
+
+// ═══════════════════════════════════════════════════
+//  WORLD MAP
+// ═══════════════════════════════════════════════════
+let mCvs,mCtx,TS=38;
+
+function initMap(){
+ mCvs=document.getElementById('mapCanvas');
+ mCtx=mCvs.getContext('2d');
+ if(!G.map)G.map=DEF_MAP.map(r=>[...r]);
+ const ws=document.getElementById('s-world');
+ const hh=ws.querySelector('.w-hdr')?.offsetHeight||42;
+ const fh=ws.querySelector('.w-ft')?.offsetHeight||72;
+ mCvs.width=window.innerWidth;
+ mCvs.height=window.innerHeight-hh-fh;
+ // Fit tile size
+ const rows=G.map.length;const cols=G.map[0]?.length||15;
+ TS=Math.min(Math.floor(mCvs.width/cols),Math.floor(mCvs.height/rows),50);
+ document.getElementById('w-loc').textContent=
+  ['','⚔️ The Shattered Realm','🌑 Shadow Reaches','🌀 Chimera Approach','🌑 The Void Throne'][G.chapter]||'⚔️ Unknown';
+ drawMap();
+ if(!G.mapTouchOn){G.mapTouchOn=true;initMapTouch();}
+}
+
+function drawMap(){
+ if(!mCtx||!G.map)return;
+ const ctx=mCtx;const ts=TS;
+ ctx.clearRect(0,0,mCvs.width,mCvs.height);
+ const rows=G.map.length;const cols=G.map[0]?.length||15;
+ const px=G.pp.x;const py=G.pp.y;
+ const camX=mCvs.width/2-px*ts-ts/2;
+ const camY=mCvs.height/2-py*ts-ts/2;
+ for(let y=0;y<rows;y++){
+  for(let x=0;x<cols;x++){
+   const tid=G.map[y]?.[x]??0;
+   const tl=TLIST[tid]||TL.VOID;
+   const dx=camX+x*ts;const dy=camY+y*ts;
+   if(dx>mCvs.width+ts||dx<-ts||dy>mCvs.height+ts||dy<-ts)continue;
+   ctx.fillStyle=tl.col;ctx.fillRect(dx,dy,ts,ts);
+   ctx.strokeStyle='rgba(38,22,96,.3)';ctx.lineWidth=.8;ctx.strokeRect(dx,dy,ts,ts);
+   if(tl.icon){
+    ctx.font=`${Math.round(ts*.6)}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(tl.icon,dx+ts/2,dy+ts/2);
+   }
+  }
+ }
+ // Player
+ const pdx=camX+px*ts;const pdy=camY+py*ts;
+ ctx.fillStyle='rgba(139,63,232,.35)';ctx.fillRect(pdx,pdy,ts,ts);
+ ctx.font=`${Math.round(ts*.7)}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+ ctx.fillText(G.player?G.player.c.ic:'⚕️',pdx+ts/2,pdy+ts/2);
+ ctx.strokeStyle='rgba(212,160,23,.85)';ctx.lineWidth=2;ctx.strokeRect(pdx+1,pdy+1,ts-2,ts-2);
+}
+
+function mv(dx,dy){
+ if(!G.map)return;
+ const nx=G.pp.x+dx;const ny=G.pp.y+dy;
+ if(ny<0||ny>=G.map.length||nx<0||nx>=(G.map[0]?.length||0))return;
+ const tid=G.map[ny]?.[nx]??0;
+ const tl=TLIST[tid];
+ if(!tl?.walk)return;
+ G.pp.x=nx;G.pp.y=ny;
+ drawMap();
+ if(tl.trg)triggerTile(tl,nx,ny);
+}
+
+function triggerTile(tl,x,y){
+ switch(tl.trg){
+  case 'battle':{
+   const en=WE[Math.floor(Math.random()*WE.length)];
+   G.map[y][x]=1;drawMap();
+   setTimeout(()=>startBattle(en.id),250);break;}
+  case 'boss':{
+   G.map[y][x]=1;drawMap();
+   const bi=G.bossIdx;
+   if(bi>=SB.length){
+    // All bosses done, but player walks on boss tile → chimera
+    setTimeout(()=>showNode('pre_chimera'),250);
+   }else{
+    setTimeout(()=>showNode('pre_boss'),250);
+   }break;}
+  case 'chest':{
+   G.map[y][x]=1;drawMap();
+   const r=Math.random();
+   if(r<.4){
+    const pot=G.player.items.find(i=>i.id==='potion');
+    if(pot)pot.uses+=2;else G.player.items.push({id:'potion',name:'Healing Draught',uses:2,ic:'🧪'});
+    notify('📦 Found Healing Draughts ×2!');
+   }else if(r<.65){
+    G.player.stats.MP=Math.min(G.player.stats.maxMP,G.player.stats.MP+25);
+    notify('📦 MP Crystal — +25 MP!');
+   }else if(r<.85){
+    G.player.exp+=80;notify('📦 XP Shard — +80 EXP!');
+   }else{
+    G.player.stats.ATK+=2;notify('📦 Power Shard — ATK +2!');
+   }
+   break;}
+  case 'save':saveGame();notify('💾 Progress saved!');break;
+  case 'npc':notify('👤 Ophiuchus: "The path ahead grows darker. Choose wisely."');break;
+  case 'door':notify('🚪 Advancing to the next area...');setTimeout(advChapter,800);break;
+ }
+}
+
+function advChapter(){
+ G.chapter=Math.min(G.chapter+1,4);
+ G.map=DEF_MAP.map(r=>[...r]);
+ // Populate with more enemies for higher chapters
+ const extras=G.chapter;
+ for(let i=0;i<extras;i++){
+  const rx=2+Math.floor(Math.random()*11);const ry=2+Math.floor(Math.random()*11);
+  if(G.map[ry]&&G.map[ry][rx]===1)G.map[ry][rx]=6;
+ }
+ G.pp={x:1,y:1};
+ notify(`⚔️ Chapter ${G.chapter} — The darkness deepens.`);
+ SS('world');initMap();
+}
+
+function initMapTouch(){
+ let ts=null;
+ mCvs.addEventListener('touchstart',e=>{ts={x:e.touches[0].clientX,y:e.touches[0].clientY};e.preventDefault();},{passive:false});
+ mCvs.addEventListener('touchend',e=>{
+  if(!ts)return;
+  const dx=e.changedTouches[0].clientX-ts.x;
+  const dy=e.changedTouches[0].clientY-ts.y;
+  const adx=Math.abs(dx);const ady=Math.abs(dy);
+  if(adx<12&&ady<12){
+   const rect=mCvs.getBoundingClientRect();
+   const tx=e.changedTouches[0].clientX-rect.left;
+   const ty=e.changedTouches[0].clientY-rect.top;
+   tapMap(tx,ty);
+  }else if(adx>ady){mv(dx>0?1:-1,0);}
+  else{mv(0,dy>0?1:-1);}
+  ts=null;e.preventDefault();
+ },{passive:false});
+}
+
+function tapMap(tx,ty){
+ const camX=mCvs.width/2-G.pp.x*TS-TS/2;
+ const camY=mCvs.height/2-G.pp.y*TS-TS/2;
+ const tileX=Math.floor((tx-camX)/TS);
+ const tileY=Math.floor((ty-camY)/TS);
+ const ddx=tileX-G.pp.x;const ddy=tileY-G.pp.y;
+ if(Math.abs(ddx)+Math.abs(ddy)===1)mv(ddx,ddy);
+}
+
+// ═══════════════════════════════════════════════════
+//  LEVEL EDITOR
+// ═══════════════════════════════════════════════════
+let eCvs,eCtx,ETS=30;
+
+function openEditor(){
+ SS('editor');
+ eCvs=document.getElementById('editorCanvas');
+ eCtx=eCvs.getContext('2d');
+ const body=document.querySelector('.ed-body');
+ eCvs.width=body.offsetWidth-58;eCvs.height=body.offsetHeight;
+ if(!G.edMap)initEdMap(15);
+ buildPalette();drawEdMap();
+ initEdTouch();
+}
+
+function initEdMap(sz){
+ G.mapSz=sz;G.edMap=[];
+ for(let y=0;y<sz;y++){
+  G.edMap.push([]);
+  for(let x=0;x<sz;x++){
+   G.edMap[y].push((x===0||y===0||x===sz-1||y===sz-1)?2:1);
+  }
+ }
+}
+
+function buildPalette(){
+ const pal=document.getElementById('t-pal');pal.innerHTML='';
+ TLIST.forEach(tl=>{
+  const b=document.createElement('button');
+  b.className='tb'+(tl.id===G.editTile?' sel':'');
+  b.style.background=tl.col;b.title=tl.label;
+  b.innerHTML=tl.icon||`<span style="font-size:.55rem;color:#aaa">${tl.label}</span>`;
+  b.onclick=()=>{G.editTile=tl.id;document.querySelectorAll('.tb').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');};
+  pal.appendChild(b);
+ });
+}
+
+function drawEdMap(){
+ if(!eCtx||!G.edMap)return;
+ const ctx=eCtx;const sz=G.mapSz;
+ ETS=Math.min(Math.floor(eCvs.width/sz),Math.floor(eCvs.height/sz),40);
+ ctx.clearRect(0,0,eCvs.width,eCvs.height);
+ for(let y=0;y<sz;y++){
+  for(let x=0;x<sz;x++){
+   const tid=G.edMap[y]?.[x]??0;
+   const tl=TLIST[tid]||TL.VOID;
+   const dx=x*ETS;const dy=y*ETS;
+   ctx.fillStyle=tl.col;ctx.fillRect(dx,dy,ETS,ETS);
+   ctx.strokeStyle='rgba(38,22,96,.5)';ctx.lineWidth=.5;ctx.strokeRect(dx,dy,ETS,ETS);
+   if(tl.icon){ctx.font=`${Math.round(ETS*.55)}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tl.icon,dx+ETS/2,dy+ETS/2);}
+  }
+ }
+}
+
+let _ePainting=false;
+function initEdTouch(){
+ function paintAt(cx,cy){
+  const rect=eCvs.getBoundingClientRect();
+  const x=Math.floor((cx-rect.left)/ETS);const y=Math.floor((cy-rect.top)/ETS);
+  if(x>=0&&y>=0&&y<(G.edMap?.length||0)&&x<(G.edMap?.[0]?.length||0)){
+   G.edMap[y][x]=G.editTile;drawEdMap();
+  }
+ }
+ eCvs.addEventListener('touchstart',e=>{_ePainting=true;paintAt(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();},{passive:false});
+ eCvs.addEventListener('touchmove',e=>{if(_ePainting)paintAt(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();},{passive:false});
+ eCvs.addEventListener('touchend',()=>_ePainting=false);
+ eCvs.addEventListener('mousedown',e=>{_ePainting=true;paintAt(e.clientX,e.clientY);});
+ eCvs.addEventListener('mousemove',e=>{if(_ePainting)paintAt(e.clientX,e.clientY);});
+ eCvs.addEventListener('mouseup',()=>_ePainting=false);
+}
+
+function saveMap(){
+ if(!G.edMap){notify('No map to save.');return;}
+ const d={map:G.edMap,sz:G.mapSz,diff:parseFloat(document.getElementById('ed-dif').value)};
+ localStorage.setItem('oph_map',JSON.stringify(d));notify('Map saved! ✓');
+}
+
+function loadMap(){
+ const d=localStorage.getItem('oph_map');
+ if(!d){notify('No saved map found.');return;}
+ try{const p=JSON.parse(d);G.edMap=p.map;G.mapSz=p.sz||15;
+  document.getElementById('ed-dif').value=p.diff||1;drawEdMap();notify('Map loaded! ✓');}
+ catch(e){notify('Failed to load map.');}
+}
+
+function clearMap(){
+ const sz=parseInt(document.getElementById('ed-sz').value)||15;
+ initEdMap(sz);drawEdMap();notify('Map cleared.');
+}
+
+function testMap(){
+ if(!G.edMap){notify('No map to test.');return;}
+ if(!G.player){notify('Create a character first!');return;}
+ G.map=G.edMap.map(r=>[...r]);
+ G.diff=parseFloat(document.getElementById('ed-dif').value)||1;
+ // Find walkable start
+ outer:for(let y=0;y<G.edMap.length;y++){
+  for(let x=0;x<G.edMap[y].length;x++){
+   if(TLIST[G.edMap[y][x]]?.walk){G.pp={x,y};break outer;}
+  }
+ }
+ notify('Testing custom map!');SS('world');initMap();
+}
+
+// ═══════════════════════════════════════════════════
+//  CHARACTER SHEET
+// ═══════════════════════════════════════════════════
+function showChar(){
+ if(!G.player)return;
+ const p=G.player;
+ document.getElementById('cs-ico').textContent=`${p.w.ic} ${p.c.ic}`;
+ document.getElementById('cs-nm').textContent=`${p.name} ${p.gender==='F'?'♀':'♂'}`;
+ document.getElementById('cs-tt').textContent=`${p.title} · Level ${p.level}`;
+ const skHtml=(p.skills||[]).map(sid=>{
+  const sk=SK[sid];return sk?`<div style="padding:.3rem 0;border-bottom:1px solid var(--border)">${sk.ic} <b>${sk.n}</b> <span style="color:var(--dim);font-size:.75rem">${sk.c} MP</span><br><span style="color:var(--dim);font-size:.78rem">${sk.d||''}</span></div>`:'';
+ }).join('');
+ const itHtml=(p.items||[]).filter(i=>i.uses>0).map(i=>`<div>${i.ic} ${i.name} ×${i.uses}</div>`).join('');
+ document.getElementById('cs-bd').innerHTML=`
+  <div class="sec-t">Western Sign</div>
+  <p style="margin-bottom:.65rem">${p.w.sym} <b>${p.w.name}</b> — ${p.w.el} / ${p.w.q}<br>
+  <span style="color:var(--dim);font-size:.82rem">${p.w.desc}</span></p>
+  <div class="sec-t">Chinese Sign</div>
+  <p style="margin-bottom:.65rem">${p.c.ic} <b>${p.c.name}</b> (${p.c.yang?'Yang':'Yin'} · ${p.c.el})<br>
+  <span style="color:var(--dim);font-size:.82rem">${p.c.desc}</span></p>
+  <div class="sec-t">Stats</div>
+  <div class="sg" style="margin-bottom:.65rem">
+   ${[['HP',`${p.stats.HP}/${p.stats.maxHP}`],['MP',`${p.stats.MP}/${p.stats.maxMP}`],
+      ['ATK',p.stats.ATK],['DEF',p.stats.DEF],['SPD',p.stats.SPD],['LCK',p.stats.LCK]]
+     .map(([k,v])=>`<div class="sc"><div class="sl">${k}</div><div class="sv">${v}</div></div>`).join('')}
+  </div>
+  <div style="font-size:.78rem;color:var(--dim);margin-bottom:.65rem">EXP: ${p.exp}/${p.expNext} · Victories: ${p.wins||0}</div>
+  <div class="sec-t">Skills</div>
+  <div style="margin-bottom:.65rem">${skHtml}</div>
+  <div class="sec-t">Items</div>
+  <div style="margin-bottom:.65rem;font-size:.88rem">${itHtml||'None'}</div>
+  <div class="sec-t" style="color:#1aaf8c">QB4I Genetic Signature</div>
+  <div style="background:rgba(2,4,8,.88);border:1px solid rgba(26,175,140,.28);
+    border-radius:4px;padding:.65rem;font-family:monospace;font-size:.7rem;
+    line-height:1.85;margin-bottom:.65rem">
+   ${['ATK','DEF','SPD','HP','MP','LCK'].map(k=>{
+    const v=p.stats[k]||0,s=QB4I.enc(v),im=QB4I.imag(s),sh=QB4I.shadow(s);
+    const[re,ic]=QB4I.complex(s);
+    return `<div>`
+     +`<span style="color:#6a5a90">${k.padEnd(4)}</span>`
+     +`<span style="color:#ddd0a8;margin:0 .3rem">${String(v).padStart(3)}</span>`
+     +`→ <b style="color:#ddd0a8">${s}</b>`
+     +`<span style="color:#8b3fe8;margin:0 .28rem">×i:${im}</span>`
+     +`<span style="color:#1aaf8c">~:${sh}</span>`
+     +`<span style="color:#6a5a90;font-size:.62rem;margin-left:.28rem">[${re},${ic}i]</span>`
+     +`</div>`;
+   }).join('')}
+   <div style="border-top:1px solid rgba(26,175,140,.18);margin-top:.4rem;padding-top:.35rem">
+    <span style="color:#6a5a90">Shadow Resonance </span>
+    <b style="color:#8b3fe8">${QB4I.shadowPow(p)}</b>
+   </div>
+  </div>
+  <button onclick="openVM();setTimeout(()=>vmExec('sig'),120)"
+    style="width:100%;padding:.5rem;margin-bottom:.65rem;
+    background:rgba(26,175,140,.1);border:1px solid rgba(26,175,140,.3);
+    color:#1aaf8c;cursor:pointer;border-radius:3px;
+    font-family:Georgia,serif;font-size:.82rem">
+    ◈ Open printf() VM Console
+  </button>
+  ${p.taint?`<div style="color:var(--redb);font-size:.82rem;margin-top:.5rem">Shadow Taint: ${'⬛'.repeat(p.taint)}${'☐'.repeat(Math.max(0,3-p.taint))}</div>`:''}`;
+}
+
+// ═══════════════════════════════════════════════════
+//  ZODIAC CODEX
+// ═══════════════════════════════════════════════════
+function openCodex(){
+ SS('codex');
+ const bd=document.getElementById('cod-bd');
+ bd.innerHTML=`<p style="color:var(--dim);font-size:.82rem;line-height:1.6;margin-bottom:1rem">
+ 12 Western monthly signs × 12 Chinese yearly animals = <b style="color:var(--gold)">144 unique hero souls</b>.<br>
+ Your birth month gives your Western sign — elemental power and cosmic quality.<br>
+ Your birth year gives your Chinese animal — fighting spirit and fate bond.<br><br>
+ Ophiuchus, the 13th sign, stands outside the 12 — the bridge between both traditions, neither East nor West.
+ </p>
+ <div class="sec-t" style="margin-top:.5rem">Western Signs (Monthly)</div>
+ ${WZ.filter(Boolean).map(w=>`<div class="cod-card"><h3>${w.sym} ${w.name} — ${w.el} / ${w.q}</h3><p>${w.ic} ${w.desc}</p></div>`).join('')}
+ <div class="sec-t" style="margin-top:1rem">Chinese Signs (Yearly)</div>
+ ${CZ.map(c=>`<div class="cod-card"><h3>${c.ic} ${c.name} — ${c.yang?'Yang':'Yin'} ${c.el}</h3><p>${c.desc}</p></div>`).join('')}
+ <div class="sec-t" style="margin-top:1rem">Shadow Bosses (12 + Chimera)</div>
+ ${SB.map(b=>`<div class="cod-card" style="border-color:#5a1010"><h3>🌑 ${b.name}</h3><p>${b.desc}</p></div>`).join('')}
+ <div class="cod-card" style="border-color:var(--redb);margin-bottom:1.5rem"><h3>💥 Shadow Chimera — Final Boss</h3><p>${CHIMERA.desc}</p></div>`;
+}
+
+// ═══════════════════════════════════════════════════
+//  ENDINGS
+// ═══════════════════════════════════════════════════
+function showEnding(which){
+ SS('end');
+ const p=G.player;
+ const E={
+  light:{t:'✨ The Light Ending',ic:'⚕️',
+   tx:`Both zodiac realms separate and heal. The 144 sign-fusions — born of chaos — become recognized throughout both worlds as the bridge-walkers: those who carry two natures.\n\n${p?.name||'The hero'} returns home changed. The stars remember your name.\n\n"All 144 paths led here," Ophiuchus says, voice fading, "and every one of them was you."`,
+   fl:'Realm Healed · Shadow Purified · Both Worlds Survive'},
+  shadow:{t:'🌑 The Shadow Ending',ic:'🌑',
+   tx:`The realms no longer separate fully. ${p?.name||'You'} walk between them — keeper of both light and shadow.\n\nThose who seek dangerous wisdom come to find you. Ophiuchus watches from the borderline: "The serpent knew you might choose this. Duality is not wrong. It is... complicated."\n\nNeither villain nor hero. Something older than both.`,
+   fl:'Shadow Absorbed · Dual Keeper · Story Unfinished'},
+  twilight:{t:'⚕️ The Twilight Ending',ic:'🌓',
+   tx:`Together — mortal zodiac-born and forgotten thirteenth sign — you unmake the Chimera and write a new cosmic law: the Layered Zodiac.\n\nEast and West overlay each other in careful harmony. The 144 fusions become the first recognized cosmic order in ten thousand years.\n\n"And every one of them was you."`,
+   fl:'Realms Merged · New Order Founded · Ophiuchus Reborn'},
+ };
+ const e=E[which]||E.light;
+ document.getElementById('e-t').textContent=e.t;
+ document.getElementById('e-ico').textContent=e.ic;
+ document.getElementById('e-tx').textContent=e.tx;
+ document.getElementById('e-st').textContent=
+  `${p?.name||'Hero'} · ${p?.title||''} · Level ${p?.level||1}\n${e.fl}`;
+}
+
+// ═══════════════════════════════════════════════════
+//  RESIZE
+// ═══════════════════════════════════════════════════
+window.addEventListener('resize',()=>{
+ if(G.scr==='world')initMap();
+ if(G.scr==='editor'){
+  const body=document.querySelector('.ed-body');
+  if(eCvs&&body){eCvs.width=body.offsetWidth-58;eCvs.height=body.offsetHeight;drawEdMap();}
+ }
+});
+
+// ═══════════════════════════════════════════════════
+//  EDITOR SIZE SELECT
+// ═══════════════════════════════════════════════════
+document.getElementById('ed-sz').addEventListener('change',function(){
+ initEdMap(parseInt(this.value));drawEdMap();
+});
+
+// ═══════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════
+SS('menu');
+console.log('🐍 OPHIUCHUS: Serpent Throne — Online');
+console.log('144 character fusions loaded.');
+console.log('12 shadow bosses + Chimera standing by.');
+</script>
+</body>
+</html>

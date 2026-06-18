@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#03060f"/>
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#261660" stroke-width="4"/>
+  <!-- Ophiuchus serpent staff -->
+  <line x1="256" y1="80" x2="256" y2="432" stroke="#d4a017" stroke-width="12" stroke-linecap="round"/>
+  <!-- Left serpent -->
+  <path d="M256,160 Q200,190 220,230 Q200,270 256,290 Q200,310 220,350 Q200,390 256,420"
+        fill="none" stroke="#1aaf8c" stroke-width="8" stroke-linecap="round"/>
+  <!-- Right serpent -->
+  <path d="M256,160 Q312,190 292,230 Q312,270 256,290 Q312,310 292,350 Q312,390 256,420"
+        fill="none" stroke="#8b3fe8" stroke-width="8" stroke-linecap="round"/>
+  <!-- Serpent heads -->
+  <circle cx="220" cy="155" r="12" fill="#1aaf8c"/>
+  <circle cx="292" cy="155" r="12" fill="#8b3fe8"/>
+  <!-- Staff cap glow -->
+  <circle cx="256" cy="80"  r="16" fill="#d4a017" opacity="0.8"/>
+  <circle cx="256" cy="432" r="14" fill="#d4a017" opacity="0.6"/>
+  <!-- ♒ symbol hint -->
+  <text x="256" y="60" font-size="28" fill="#4488CC" text-anchor="middle" font-family="serif">♒</text>
+  <!-- Glow -->
+  <circle cx="256" cy="256" r="60" fill="#8b3fe8" opacity="0.06"/>
+</svg>
